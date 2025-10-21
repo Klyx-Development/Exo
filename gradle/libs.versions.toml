@@ -1,0 +1,20 @@
+[versions]
+paper-api = "1.21.8-R0.1-SNAPSHOT"
+lombok = "1.18.34"
+commandapi = "10.1.2"
+shadow = "8.3.0"
+run-paper = "2.3.0"
+paperweight-userdev = "2.0.0-beta.18"
+kotlin = "2.1.20-RC"
+
+[libraries]
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+commandapi = { group = "dev.jorel", name = "commandapi-bukkit-shade-mojang-mapped", version.ref = "commandapi" }
+commandapi-kotlin = { group = "dev.jorel", name = "commandapi-bukkit-kotlin", version.ref = "commandapi" }
+kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+
+[plugins]
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight-userdev" }

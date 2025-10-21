@@ -1,0 +1,5 @@
+name: ExoTest
+version: '1.0'
+main: org.klyx.exotest.ExoTest
+description: Test plugin for Exo
+api-version: '1.21.8'
