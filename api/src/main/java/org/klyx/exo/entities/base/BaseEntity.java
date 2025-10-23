@@ -1,4 +1,4 @@
-package org.klyx.exo.entities;
+package org.klyx.exo.entities.base;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
