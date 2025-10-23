@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.klyx.exo.data.attributes.EntityAttributes;
 import org.klyx.exo.data.equipment.EntityEquipment;
 import org.klyx.exo.data.keys.DataKeys;
+import org.klyx.exo.entities.base.AbstractEntity;
 
 import java.util.List;
 import java.util.Optional;

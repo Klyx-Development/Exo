@@ -1,8 +1,9 @@
 package org.klyx.exo.storage;
 
 import org.jetbrains.annotations.NotNull;
-import org.klyx.exo.entities.AbstractEntity;
+import org.klyx.exo.entities.base.AbstractEntity;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,6 +32,10 @@ public class EntityStorage {
 
     public static AbstractEntity getEntity(int entityId) {
         return entities.get(entityId);
+    }
+
+    public static List<AbstractEntity> getEntities() {
+        return List.copyOf(entities.values());
     }
 
 }

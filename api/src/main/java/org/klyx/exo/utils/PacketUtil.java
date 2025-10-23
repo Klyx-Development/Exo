@@ -13,12 +13,11 @@ import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.klyx.exo.entities.AbstractEntity;
+import org.klyx.exo.entities.base.AbstractEntity;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public class PacketUtil {
 

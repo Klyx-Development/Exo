@@ -61,9 +61,9 @@ public class EntityMetadata {
         metadata.clear();
     }
 
-    public @Nullable ClientboundSetEntityDataPacket createPacket() {
+    public ClientboundSetEntityDataPacket createPacket() {
         List<SynchedEntityData.DataValue<?>> dataValues = getDataValues();
-        if (dataValues.isEmpty()) return null;
+        if (dataValues.isEmpty()) throw new IllegalStateException("No data values to send.");
 
         try {
             return new ClientboundSetEntityDataPacket(entityId, dataValues);

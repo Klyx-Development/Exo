@@ -5,16 +5,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.klyx.exo.entities.AbstractEntity;
+import org.klyx.exo.entities.base.AbstractEntity;
 import org.klyx.exo.utils.PacketUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EntityAttributes {
@@ -66,7 +62,7 @@ public class EntityAttributes {
     }
 
     public void refresh() {
-        if (!entity.isSpawned()) return;
+        if (!entity.isAlive()) return;
 
         PacketUtil.sendPacket(entity.getViewers(), createPacket());
     }
