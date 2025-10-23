@@ -36,13 +36,6 @@ public interface VisibilityRule extends BiPredicate<Player, AbstractEntity> {
         return (player, entity) -> player.hasPermission(permission);
     }
 
-    static VisibilityRule lineOfSight() {
-        return (player, entity) -> {
-            if (entity.getLocation() == null) return false;
-            return player.hasLineOfSight(entity.getLocation());
-        };
-    }
-
     static VisibilityRule custom(BiPredicate<Player, AbstractEntity> predicate) {
         return predicate::test;
     }
