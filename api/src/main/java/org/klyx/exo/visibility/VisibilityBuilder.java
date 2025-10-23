@@ -63,11 +63,6 @@ public class VisibilityBuilder {
         return this;
     }
 
-    public VisibilityBuilder lineOfSight() {
-        rules.add(VisibilityRule.lineOfSight());
-        return this;
-    }
-
     public VisibilityBuilder custom(BiPredicate<Player, AbstractEntity> predicate) {
         rules.add(VisibilityRule.custom(predicate));
         return this;
