@@ -7,8 +7,9 @@ allprojects {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
     }
+
+    version = "1.0"
 }
 
 group = "org.klyx.exo"
-version = "1.0"
 description = "Klyx's packet entity API"

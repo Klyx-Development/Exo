@@ -24,8 +24,10 @@ tasks {
     }
 
     shadowJar {
-        archiveFileName = "${rootProject.name}-${project.version}.jar"
+        archiveFileName = "${rootProject.name}-test-${project.version}.jar"
         archiveClassifier = null
+
+        from(project(":api").sourceSets.main.get().output)
 
         manifest {
             attributes["Implementation-Version"] = rootProject.version
@@ -44,8 +46,6 @@ tasks {
     withType<Javadoc>() {
         options.encoding = Charsets.UTF_8.name()
     }
-
-    defaultTasks("build")
 
     val version = "1.21.8"
     val javaVersion = JavaLanguageVersion.of(21)
