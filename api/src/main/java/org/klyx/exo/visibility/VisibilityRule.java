@@ -2,7 +2,7 @@ package org.klyx.exo.visibility;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 
 import java.util.function.BiPredicate;
 

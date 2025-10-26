@@ -1,9 +1,9 @@
-package org.klyx.exo.entities.base;
+package org.klyx.exo.entities.impl;
 
 import org.bukkit.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,10 +11,11 @@ import org.klyx.exo.data.entity.EntityState;
 import org.klyx.exo.data.entity.StateTransition;
 import org.klyx.exo.data.keys.DataKeys;
 import org.klyx.exo.data.metadata.EntityMetadata;
-import org.klyx.exo.entities.base.components.MountComponent;
-import org.klyx.exo.entities.base.components.SpatialComponent;
-import org.klyx.exo.entities.base.components.ViewerRegistry;
+import org.klyx.exo.entities.impl.components.MountComponent;
+import org.klyx.exo.entities.impl.components.SpatialComponent;
+import org.klyx.exo.entities.impl.components.ViewerRegistry;
 import org.klyx.exo.storage.EntityStorage;
+import org.klyx.exo.utils.ConversionUtil;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -60,7 +61,7 @@ public abstract class AbstractEntity {
 
     protected void initDefaultMetadata() {
         entityMetadata.set(DataKeys.AIR_TICKS, 100);
-        entityMetadata.set(DataKeys.POSE, Pose.STANDING);
+        entityMetadata.set(DataKeys.POSE, ConversionUtil.bukkitToMinecraft(Pose.STANDING));
         entityMetadata.set(DataKeys.SILENT, false);
         entityMetadata.set(DataKeys.NO_GRAVITY, false);
         entityMetadata.set(DataKeys.FROZEN_TICKS, 0);
@@ -164,6 +165,9 @@ public abstract class AbstractEntity {
         return EntityStorage.getEntity(mountComponent.getRidingEntityId());
     }
 
+    public AbstractEntity getEntity() {
+        return this;
+    }
 
     public int getEntityId() {
         return entityId;

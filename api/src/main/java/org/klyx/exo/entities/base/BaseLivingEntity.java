@@ -3,10 +3,10 @@ package org.klyx.exo.entities.base;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.klyx.exo.entities.impl.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractLivingEntity;
 
-public class BaseEntity extends AbstractEntity {
-    public BaseEntity(@NotNull EntityType entityType) {
+public class BaseLivingEntity extends AbstractLivingEntity {
+    public BaseLivingEntity(@NotNull EntityType entityType) {
         super(entityType);
     }
 

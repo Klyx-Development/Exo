@@ -1,6 +1,6 @@
-package org.klyx.exo.entities.base.components;
+package org.klyx.exo.entities.impl.components;
 
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.storage.EntityStorage;
 import org.klyx.exo.utils.PacketUtil;
 

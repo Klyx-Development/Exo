@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.klyx.exo.data.entity.EntityState;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.storage.EntityStorage;
 
 import java.util.ArrayList;
@@ -40,9 +40,9 @@ public class VisibilityManager {
         this.updateTaskEnabled = true;
 
         if (async) {
-            updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::updateAllConditions, 0L, intervalTicks);
+            updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::updateAllConditions, 0L, updateInterval);
         } else {
-            updateTask = Bukkit.getScheduler().runTaskTimer(plugin, this::updateAllConditions, 0L, intervalTicks);
+            updateTask = Bukkit.getScheduler().runTaskTimer(plugin, this::updateAllConditions, 0L, updateInterval);
         }
     }
 
