@@ -13,7 +13,7 @@ import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;

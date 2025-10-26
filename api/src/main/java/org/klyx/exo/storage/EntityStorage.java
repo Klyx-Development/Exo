@@ -1,7 +1,7 @@
 package org.klyx.exo.storage;
 
 import org.jetbrains.annotations.NotNull;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 
 import java.util.List;
 import java.util.Map;

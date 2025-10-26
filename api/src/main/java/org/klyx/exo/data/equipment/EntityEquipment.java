@@ -3,10 +3,11 @@ package org.klyx.exo.data.equipment;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.utils.PacketUtil;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class EntityEquipment {
 
     public @NotNull ItemStack getItem(@NotNull EquipmentSlot slot) {
         ItemStack item = equipment.get(slot);
-        return item == null ? ItemStack.EMPTY : item;
+        return item == null ? ItemStack.empty() : item;
     }
 
     public @NotNull ItemStack getHelmet() {
@@ -74,9 +75,9 @@ public class EntityEquipment {
     }
 
     private @NotNull ClientboundSetEquipmentPacket createPacket() {
-        List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();
+        List<Pair<EquipmentSlot, net.minecraft.world.item.ItemStack>> equipment = new ArrayList<>();
         for (Map.Entry<EquipmentSlot, ItemStack> items : this.equipment.entrySet()) {
-            equipment.add(Pair.of(items.getKey(), items.getValue()));
+            equipment.add(Pair.of(items.getKey(), CraftItemStack.asNMSCopy(items.getValue())));
         }
 
         return new ClientboundSetEquipmentPacket(

@@ -1,4 +1,4 @@
-package org.klyx.exo.entities.base.components;
+package org.klyx.exo.entities.impl.components;
 
 import net.minecraft.network.protocol.game.ClientboundEntityPositionSyncPacket;
 import net.minecraft.world.entity.PositionMoveRotation;
@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.klyx.exo.data.entity.EntityState;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.utils.PacketUtil;
 
 public class SpatialComponent {

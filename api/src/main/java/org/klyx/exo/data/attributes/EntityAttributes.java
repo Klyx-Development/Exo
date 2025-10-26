@@ -2,10 +2,9 @@ package org.klyx.exo.data.attributes;
 
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.bukkit.NamespacedKey;
+import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.utils.PacketUtil;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class EntityAttributes {
         this.entity = entity;
     }
 
-    public void setAttribute(Attribute attribute, double value, List<AttributeModifier> modifiers) {
+    public void setAttribute(org.bukkit.attribute.Attribute attribute, double value, List<org.bukkit.attribute.AttributeModifier> modifiers) {
         entries.removeIf(entry -> entry.getAttribute().value() == attribute);
 
         AttributeEntry entry = new AttributeEntry(attribute, value);
@@ -32,26 +31,26 @@ public class EntityAttributes {
         refresh();
     }
 
-    public void setAttribute(Attribute attribute, double value, AttributeModifier modifier) {
+    public void setAttribute(org.bukkit.attribute.Attribute attribute, double value, org.bukkit.attribute.AttributeModifier modifier) {
         setAttribute(attribute, value, Collections.singletonList(modifier));
     }
 
-    public void setAttribute(Attribute attribute, double value) {
+    public void setAttribute(org.bukkit.attribute.Attribute attribute, double value) {
         setAttribute(attribute, value, Collections.emptyList());
     }
 
-    public void removeAttribute(Attribute attribute, AttributeModifier modifier) {
+    public void removeAttribute(org.bukkit.attribute.Attribute attribute, org.bukkit.attribute.AttributeModifier modifier) {
         entries.stream()
                 .filter(entry -> entry.getAttribute().value() == attribute)
                 .findFirst()
                 .ifPresent(entry ->{
-                    ResourceLocation modifierId = modifier.id();
-                    entry.removeModifier(modifierId);
+                    NamespacedKey modifierId = modifier.getKey();
+                    entry.removeModifier(ResourceLocation.fromNamespaceAndPath(modifierId.getNamespace(), modifierId.getKey()));
                 });
         refresh();
     }
 
-    public void removeAttribute(Attribute attribute) {
+    public void removeAttribute(org.bukkit.attribute.Attribute attribute) {
         entries.removeIf(entry -> entry.getAttribute().value() == attribute);
         refresh();
     }

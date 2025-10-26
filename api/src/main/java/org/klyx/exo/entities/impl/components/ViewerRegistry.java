@@ -1,10 +1,9 @@
-package org.klyx.exo.entities.base.components;
+package org.klyx.exo.entities.impl.components;
 
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.A;
 import org.klyx.exo.data.entity.EntityState;
-import org.klyx.exo.entities.base.AbstractEntity;
+import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.utils.PacketUtil;
 
 import java.util.ArrayList;
