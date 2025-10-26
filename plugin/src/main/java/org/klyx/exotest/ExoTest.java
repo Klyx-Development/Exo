@@ -29,7 +29,7 @@ public class ExoTest extends JavaPlugin {
                             .then(Commands.literal("zombie"))
                             .executes(ctx -> {
                                 BaseLivingEntity entity = new BaseLivingEntity(EntityType.ZOMBIE);
-                                //entity.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+                                entity.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
                                 entity.spawn(ctx.getSource().getLocation());
                                 entity.showTo((Player) ctx.getSource().getSender());
 

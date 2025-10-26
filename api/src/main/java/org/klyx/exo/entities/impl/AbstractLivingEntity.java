@@ -1,6 +1,5 @@
 package org.klyx.exo.entities.impl;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -46,42 +45,34 @@ public abstract class AbstractLivingEntity extends AbstractEntity {
     }
 
     public void setHelmet(ItemStack itemStack) {
-        if (!isAlive()) return;
         this.getEquipment().setItem(EquipmentSlot.HEAD, itemStack);
     }
 
     public void setChestplate(ItemStack itemStack) {
-        if (!isAlive()) return;
         this.getEquipment().setItem(EquipmentSlot.CHEST, itemStack);
     }
 
     public void setLeggings(ItemStack itemStack) {
-        if (!isAlive()) return;
         this.getEquipment().setItem(EquipmentSlot.LEGS, itemStack);
     }
 
     public void setBoots(ItemStack itemStack) {
-        if (!isAlive()) return;
         this.getEquipment().setItem(EquipmentSlot.FEET, itemStack);
     }
 
     public void setMainHand(ItemStack itemStack) {
-        if (!isAlive()) return;
         this.getEquipment().setItem(EquipmentSlot.MAINHAND, itemStack);
     }
 
     public void setOffHand(ItemStack itemStack) {
-        if (!isAlive()) return;
         this.getEquipment().setItem(EquipmentSlot.OFFHAND, itemStack);
     }
 
     public void setAttribute(Attribute attribute, double value) {
-        if (!isAlive()) return;
         this.getEntityAttributes().setAttribute(attribute, value);
     }
 
     public void setAttribute(Attribute attribute, double value, List<AttributeModifier> modifiers) {
-        if (!isAlive()) return;
         this.getEntityAttributes().setAttribute(attribute, value, modifiers);
     }
 
