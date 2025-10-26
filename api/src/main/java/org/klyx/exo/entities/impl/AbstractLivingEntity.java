@@ -42,7 +42,7 @@ public abstract class AbstractLivingEntity extends AbstractEntity {
         entityMetadata.set(DataKeys.POTION_EFFECT_AMBIENT, false);
         entityMetadata.set(DataKeys.ARROWS_IN_ENTITY, 0);
         entityMetadata.set(DataKeys.BEE_STINGERS_IN_ENTITY, 0);
-        //entityMetadata.set(DataKeys.BED_POSITION, Optional.of(BlockPos.ZERO));
+        entityMetadata.set(DataKeys.BED_POSITION, Optional.empty());
     }
 
     public void setHelmet(ItemStack itemStack) {
