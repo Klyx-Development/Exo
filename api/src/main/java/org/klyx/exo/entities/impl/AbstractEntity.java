@@ -113,6 +113,10 @@ public abstract class AbstractEntity {
         return true;
     }
 
+    public abstract void onSpawn();
+
+    public abstract void onDespawn();
+
     public void showTo(@NotNull Player player) {
         viewerRegistry.addViewer(player);
     }
@@ -165,9 +169,7 @@ public abstract class AbstractEntity {
         return EntityStorage.getEntity(mountComponent.getRidingEntityId());
     }
 
-    public AbstractEntity getEntity() {
-        return this;
-    }
+    public AbstractEntity getEntity() {return this;}
 
     public int getEntityId() {
         return entityId;

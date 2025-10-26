@@ -11,6 +11,12 @@ public class BaseLivingEntity extends AbstractLivingEntity {
     }
 
     @Override
+    public void onSpawn() {}
+
+    @Override
+    public void onDespawn() {}
+
+    @Override
     public void onViewerAdded(Player player) {}
 
     @Override
