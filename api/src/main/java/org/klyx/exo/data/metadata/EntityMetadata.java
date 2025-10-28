@@ -25,6 +25,11 @@ public class EntityMetadata {
         setIndex(key.getIndex(), key.getAccessor(), value);
     }
 
+    public <T> void set(@NotNull DataKey<T> key) {
+        if (key.getDefaultValue() == null) throw new IllegalArgumentException("Default value cannot be null");
+        setIndex(key.getIndex(), key.getAccessor(), key.getDefaultValue());
+    }
+
     public <T> void setIndex(int index, @NotNull EntityDataAccessor<T> accessor, @NotNull T value) {
         if (accessor.id() != index) {
             throw new IllegalArgumentException("Index mismatch: " + index + " != " + accessor.id());

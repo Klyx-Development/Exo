@@ -11,9 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.klyx.exo.Exo;
-import org.klyx.exo.entities.base.BaseEntity;
 import org.klyx.exo.entities.base.BaseLivingEntity;
-import org.klyx.exo.visibility.VisibilityBuilder;
+import org.klyx.exo.entities.specific.PacketAreaEffectCloud;
+import org.klyx.exo.entities.specific.PacketPainting;
 
 public class ExoTest extends JavaPlugin {
 
@@ -26,15 +26,24 @@ public class ExoTest extends JavaPlugin {
             final Commands commands = event.registrar();
             commands.register(
                     Commands.literal("testspawn")
-                            .then(Commands.literal("zombie"))
-                            .executes(ctx -> {
-                                BaseLivingEntity entity = new BaseLivingEntity(EntityType.ZOMBIE);
-                                entity.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-                                entity.spawn(ctx.getSource().getLocation());
-                                entity.showTo((Player) ctx.getSource().getSender());
+                            .then(Commands.literal("zombie")
+                                .executes(ctx -> {
+                                    BaseLivingEntity entity = new BaseLivingEntity(EntityType.ZOMBIE);
+                                    entity.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+                                    entity.spawn(ctx.getSource().getLocation());
+                                    entity.showTo((Player) ctx.getSource().getSender());
 
-                                return Command.SINGLE_SUCCESS;
-                            })
+                                    return Command.SINGLE_SUCCESS;
+                                }))
+                            .then(Commands.literal("specific")
+                                .executes(ctx -> {
+                                    PacketPainting cloud = new PacketPainting();
+                                    cloud.spawn(ctx.getSource().getLocation());
+                                    cloud.showTo((Player) ctx.getSource().getSender());
+
+                                    return Command.SINGLE_SUCCESS;
+                                }))
+
                             .build()
             );
         });
