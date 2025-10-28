@@ -35,13 +35,13 @@ public abstract class AbstractLivingEntity extends AbstractEntity {
     protected void initDefaultMetadata() {
         super.initDefaultMetadata();
 
-        entityMetadata.set(DataKeys.HAND_STATES, (byte) 0);
-        entityMetadata.set(DataKeys.HEALTH, 1.0f);
-        entityMetadata.set(DataKeys.PARTICLES, List.of());
-        entityMetadata.set(DataKeys.POTION_EFFECT_AMBIENT, false);
-        entityMetadata.set(DataKeys.ARROWS_IN_ENTITY, 0);
-        entityMetadata.set(DataKeys.BEE_STINGERS_IN_ENTITY, 0);
-        entityMetadata.set(DataKeys.BED_POSITION, Optional.empty());
+        entityMetadata.set(DataKeys.LivingEntity.HAND_STATES);
+        entityMetadata.set(DataKeys.LivingEntity.HEALTH);
+        entityMetadata.set(DataKeys.LivingEntity.PARTICLES);
+        entityMetadata.set(DataKeys.LivingEntity.POTION_EFFECT_AMBIENT);
+        entityMetadata.set(DataKeys.LivingEntity.ARROWS_IN_ENTITY);
+        entityMetadata.set(DataKeys.LivingEntity.BEE_STINGERS_IN_ENTITY);
+        entityMetadata.set(DataKeys.LivingEntity.BED_POSITION);
     }
 
     public void setHelmet(ItemStack itemStack) {

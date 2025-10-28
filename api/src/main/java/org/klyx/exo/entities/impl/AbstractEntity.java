@@ -60,12 +60,12 @@ public abstract class AbstractEntity {
     }
 
     protected void initDefaultMetadata() {
-        entityMetadata.set(DataKeys.AIR_TICKS, 100);
-        entityMetadata.set(DataKeys.POSE, ConversionUtil.bukkitToMinecraft(Pose.STANDING));
-        entityMetadata.set(DataKeys.SILENT, false);
-        entityMetadata.set(DataKeys.NO_GRAVITY, false);
-        entityMetadata.set(DataKeys.FROZEN_TICKS, 0);
-        entityMetadata.set(DataKeys.FLAGS, (byte) 0);
+        entityMetadata.set(DataKeys.Entity.AIR_TICKS);
+        entityMetadata.set(DataKeys.Entity.POSE, ConversionUtil.bukkitToMinecraft(Pose.STANDING));
+        entityMetadata.set(DataKeys.Entity.SILENT);
+        entityMetadata.set(DataKeys.Entity.NO_GRAVITY);
+        entityMetadata.set(DataKeys.Entity.FROZEN_TICKS);
+        entityMetadata.set(DataKeys.Entity.FLAGS);
     }
 
     public void transitionEntityState(@NotNull EntityState newState) {
