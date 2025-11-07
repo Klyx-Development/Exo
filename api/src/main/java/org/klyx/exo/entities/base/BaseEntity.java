@@ -5,20 +5,60 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.klyx.exo.entities.impl.AbstractEntity;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 public class BaseEntity extends AbstractEntity {
+    private Consumer<Optional<?>> onSpawn;
+    private Consumer<Optional<?>> onDespawn;
+    private Consumer<Player> onViewerAdded;
+    private Consumer<Player> onViewerRemoved;
+
     public BaseEntity(@NotNull EntityType entityType) {
         super(entityType);
     }
 
     @Override
-    public void onSpawn() {}
+    protected final void initDefaultMetadata() {
+        super.initDefaultMetadata();
+    }
 
     @Override
-    public void onDespawn() {}
+    public void applyExtraMetadata() {}
 
     @Override
-    public void onViewerAdded(Player player) {}
+    public void onSpawn() {
+        onSpawn.accept(Optional.empty());
+    }
+
+    public void onSpawn(Consumer<Optional<?>> consumer) {
+        this.onSpawn = consumer;
+    }
 
     @Override
-    public void onViewerRemoved(Player player) {}
+    public void onDespawn() {
+        onDespawn.accept(Optional.empty());
+    }
+
+    public void onDespawn(Consumer<Optional<?>> consumer) {
+        this.onDespawn = consumer;
+    }
+
+    @Override
+    public void onViewerAdded(Player player) {
+        onViewerAdded.accept(player);
+    }
+
+    public void onViewerAdded(Consumer<Player> callback) {
+        this.onViewerAdded = callback;
+    }
+
+    @Override
+    public void onViewerRemoved(Player player) {
+        onViewerRemoved.accept(player);
+    }
+
+    public void onViewerRemoved(Consumer<Player> callback) {
+        this.onViewerRemoved = callback;
+    }
 }

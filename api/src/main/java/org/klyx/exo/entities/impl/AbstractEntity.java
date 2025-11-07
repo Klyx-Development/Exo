@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.klyx.exo.data.entity.EntityState;
 import org.klyx.exo.data.entity.StateTransition;
+import org.klyx.exo.data.keys.DataKey;
 import org.klyx.exo.data.keys.DataKeys;
 import org.klyx.exo.data.metadata.EntityMetadata;
 import org.klyx.exo.entities.impl.components.MountComponent;
@@ -39,7 +40,7 @@ public abstract class AbstractEntity {
     private final ViewerRegistry viewerRegistry;
     private final SpatialComponent spatialComponent;
     private final MountComponent mountComponent;
-    public final @NotNull EntityMetadata entityMetadata;
+    protected final @NotNull EntityMetadata entityMetadata;
 
     public AbstractEntity(@NotNull EntityType entityType) {
         this(EntityStorage.newEntityId(), UUID.randomUUID(), entityType);
@@ -57,15 +58,26 @@ public abstract class AbstractEntity {
         this.mountComponent = new MountComponent(this);
 
         initDefaultMetadata();
+        applyExtraMetadata();
     }
 
     protected void initDefaultMetadata() {
-        entityMetadata.set(DataKeys.Entity.AIR_TICKS);
-        entityMetadata.set(DataKeys.Entity.POSE, ConversionUtil.bukkitToMinecraft(Pose.STANDING));
-        entityMetadata.set(DataKeys.Entity.SILENT);
-        entityMetadata.set(DataKeys.Entity.NO_GRAVITY);
-        entityMetadata.set(DataKeys.Entity.FROZEN_TICKS);
-        entityMetadata.set(DataKeys.Entity.FLAGS);
+        setMetadata(DataKeys.Entity.AIR_TICKS);
+        setMetadata(DataKeys.Entity.POSE, ConversionUtil.bukkitToMinecraft(Pose.STANDING));
+        setMetadata(DataKeys.Entity.SILENT);
+        setMetadata(DataKeys.Entity.NO_GRAVITY);
+        setMetadata(DataKeys.Entity.FROZEN_TICKS);
+        setMetadata(DataKeys.Entity.FLAGS);
+    }
+
+    public abstract void applyExtraMetadata();
+
+    public <T> void setMetadata(DataKey<T> key, T value) {
+        entityMetadata.set(key, value);
+    }
+
+    public <T> void setMetadata(DataKey<T> key) {
+        entityMetadata.set(key);
     }
 
     public void transitionEntityState(@NotNull EntityState newState) {
@@ -149,12 +161,20 @@ public abstract class AbstractEntity {
         spatialComponent.updateLocation(location);
     }
 
-    public void mount(int passengerId) {
+    public void addPassenger(int passengerId) {
         mountComponent.addPassenger(passengerId);
     }
 
-    public void dismount(int passengerId) {
+    public void addPassenger(AbstractEntity passengerEntity) {
+        mountComponent.addPassenger(passengerEntity.getEntityId());
+    }
+
+    public void removePassenger(int passengerId) {
         mountComponent.removePassenger(passengerId);
+    }
+
+    public void removePassenger(AbstractEntity passengerEntity) {
+        mountComponent.removePassenger(passengerEntity.getEntityId());
     }
 
     public List<Integer> getPassengers() {
@@ -195,5 +215,10 @@ public abstract class AbstractEntity {
     @ApiStatus.Internal
     public MountComponent getMountComponent() {
         return mountComponent;
+    }
+
+    @ApiStatus.Internal
+    public EntityMetadata getEntityMetadata() {
+        return entityMetadata;
     }
 }

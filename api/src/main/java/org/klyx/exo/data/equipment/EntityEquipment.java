@@ -69,15 +69,18 @@ public class EntityEquipment {
     }
 
     public void refresh() {
-        PacketUtil.sendPacket(entity.getViewers(), createPacket());
+        ClientboundSetEquipmentPacket packet = createPacket();
+        if (packet == null) return;
+        PacketUtil.sendPacket(entity.getViewers(), packet);
     }
 
-    public @NotNull ClientboundSetEquipmentPacket createPacket() {
+    public @Nullable ClientboundSetEquipmentPacket createPacket() {
         List<Pair<EquipmentSlot, net.minecraft.world.item.ItemStack>> equipment = new ArrayList<>();
         for (Map.Entry<EquipmentSlot, ItemStack> items : this.equipment.entrySet()) {
             equipment.add(Pair.of(items.getKey(), CraftItemStack.asNMSCopy(items.getValue())));
         }
 
+        if (equipment.isEmpty()) return null;
         return new ClientboundSetEquipmentPacket(entity.getEntityId(), equipment);
     }
 }

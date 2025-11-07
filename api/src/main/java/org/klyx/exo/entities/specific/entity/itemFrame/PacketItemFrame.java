@@ -1,4 +1,4 @@
-package org.klyx.exo.entities.specific.itemFrame;
+package org.klyx.exo.entities.specific.entity.itemFrame;
 
 import org.bukkit.entity.EntityType;
 

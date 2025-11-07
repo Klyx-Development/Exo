@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Rotations;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -157,7 +158,7 @@ public final class DataKeys {
 
         public static final DataKey<OptionalInt> LAUNCHER_ENTITY_ID = DataKey.create(
                 9,
-                new EntityDataAccessor<>(8, EntityDataSerializers.OPTIONAL_UNSIGNED_INT),
+                new EntityDataAccessor<>(9, EntityDataSerializers.OPTIONAL_UNSIGNED_INT),
                 OptionalInt.empty()
         );
 
@@ -224,22 +225,6 @@ public final class DataKeys {
         );
     }
 
-    public static final class Painting {
-        public static final DataKey<Direction> DIRECTION = DataKey.create(
-                8,
-                new EntityDataAccessor<>(8, EntityDataSerializers.DIRECTION),
-                Direction.SOUTH
-        );
-
-        public static final DataKey<Holder<PaintingVariant>> PAINTING_VARIANT = DataKey.create(
-                9,
-                new EntityDataAccessor<>(8, EntityDataSerializers.PAINTING_VARIANT),
-                CraftArt.bukkitToMinecraftHolder((Art) PaperRegistryAccess.instance().getRegistry(RegistryKey.PAINTING_VARIANT))
-        );
-    }
-
-    // LIVING ENTITY
-
     public static final class LivingEntity {
         public static final DataKey<Byte> HAND_STATES = DataKey.create(
                 8,
@@ -284,7 +269,49 @@ public final class DataKeys {
         );
     }
 
-    // MOB
+    public static final class ArmorStand {
+        public static final DataKey<Byte> ARMOR_STAND_OPTIONS = DataKey.create(
+                15,
+                new EntityDataAccessor<>(15, EntityDataSerializers.BYTE),
+                (byte) 0
+        );
+
+        public static final DataKey<Rotations> HEAD_ROTATION = DataKey.create(
+                16,
+                new EntityDataAccessor<>(16, EntityDataSerializers.ROTATIONS),
+                new Rotations(0, 0, 0)
+        );
+
+        public static final DataKey<Rotations> BODY_ROTATION = DataKey.create(
+                17,
+                new EntityDataAccessor<>(17, EntityDataSerializers.ROTATIONS),
+                new Rotations(0, 0, 0)
+        );
+
+        public static final DataKey<Rotations> LEFT_ARM_ROTATION = DataKey.create(
+                18,
+                new EntityDataAccessor<>(18, EntityDataSerializers.ROTATIONS),
+                new Rotations(-10, 0, -10)
+        );
+
+        public static final DataKey<Rotations> RIGHT_ARM_ROTATION = DataKey.create(
+                19,
+                new EntityDataAccessor<>(19, EntityDataSerializers.ROTATIONS),
+                new Rotations(-15, 0, 10)
+        );
+
+        public static final DataKey<Rotations> LEFT_LEG_ROTATION = DataKey.create(
+                20,
+                new EntityDataAccessor<>(20, EntityDataSerializers.ROTATIONS),
+                new Rotations(-1, 0, -1)
+        );
+
+        public static final DataKey<Rotations> RIGHT_LEG_ROTATION = DataKey.create(
+                21,
+                new EntityDataAccessor<>(21, EntityDataSerializers.ROTATIONS),
+                new Rotations(1, 0, 1)
+        );
+    }
 
     public static final class Mob {
         public static final DataKey<Byte> MOB_FLAGS = DataKey.create(
