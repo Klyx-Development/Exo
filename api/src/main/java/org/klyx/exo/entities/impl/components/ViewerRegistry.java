@@ -2,6 +2,7 @@ package org.klyx.exo.entities.impl.components;
 
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import org.bukkit.entity.Player;
 import org.klyx.exo.data.entity.EntityState;
 import org.klyx.exo.entities.impl.AbstractEntity;
@@ -27,10 +28,14 @@ public class ViewerRegistry {
         try {
             List<Packet<?>> packetList = new ArrayList<>();
             packetList.add(PacketUtil.createSpawnPacket(entity));
-            packetList.add(entity.entityMetadata.createPacket());
+            packetList.add(entity.getEntityMetadata().createPacket());
 
             if (entity instanceof AbstractLivingEntity livingEntity) {
-                packetList.add(livingEntity.getEquipment().createPacket());
+                ClientboundSetEquipmentPacket packet = livingEntity.getEquipment().createPacket();
+                if (packet != null) {
+                    packetList.add(packet);
+                }
+
                 packetList.add(livingEntity.getEntityAttributes().createPacket());
             }
 
