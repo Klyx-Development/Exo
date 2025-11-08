@@ -6,6 +6,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.klyx.exo.data.keys.DataKey;
+import org.klyx.exo.entities.impl.AbstractEntity;
+import org.klyx.exo.storage.EntityStorage;
+import org.klyx.exo.utils.PacketUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +17,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityMetadata {
 
-    private final int entityId;
+    private final AbstractEntity entity;
     private final ConcurrentHashMap<Integer, SynchedEntityData.DataItem<?>> metadata = new ConcurrentHashMap<>();
 
-    public EntityMetadata(int entityId) {
-        this.entityId = entityId;
+    public EntityMetadata(AbstractEntity entity) {
+        this.entity = entity;
     }
 
     public <T> void set(@NotNull DataKey<T> key, @NotNull T value) {
         setIndex(key.getIndex(), key.getAccessor(), value);
+        refresh();
     }
 
     public <T> void set(@NotNull DataKey<T> key) {
@@ -66,14 +70,19 @@ public class EntityMetadata {
         metadata.clear();
     }
 
+    public void refresh() {
+        if (!entity.isAlive()) return;
+        PacketUtil.sendPacket(entity.getViewers(), createPacket());
+    }
+
     public ClientboundSetEntityDataPacket createPacket() {
         List<SynchedEntityData.DataValue<?>> dataValues = getDataValues();
         if (dataValues.isEmpty()) throw new IllegalStateException("No data values to send.");
 
         try {
-            return new ClientboundSetEntityDataPacket(entityId, dataValues);
+            return new ClientboundSetEntityDataPacket(entity.getEntityId(), dataValues);
         } catch (Exception e) {
-            throw new IllegalStateException("Something went wrong trying to create a metadata packet for entity with id: " + entityId + ", " + e.getMessage());
+            throw new IllegalStateException("Something went wrong trying to create a metadata packet for entity with id: " + entity.getEntityId() + ", " + e.getMessage());
         }
     }
 

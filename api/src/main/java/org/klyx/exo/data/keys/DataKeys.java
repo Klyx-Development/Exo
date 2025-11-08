@@ -1,29 +1,23 @@
 package org.klyx.exo.data.keys;
 
-import io.papermc.paper.registry.PaperRegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
-import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.Rotations;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.decoration.Painting;
-import net.minecraft.world.entity.decoration.PaintingVariant;
-import net.minecraft.world.entity.decoration.PaintingVariants;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.Art;
-import org.bukkit.craftbukkit.CraftArt;
-import org.bukkit.craftbukkit.entity.CraftPainting;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import org.bukkit.craftbukkit.block.CraftBlockStates;
+import org.bukkit.craftbukkit.block.impl.CraftTnt;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
@@ -141,7 +135,7 @@ public final class DataKeys {
         );
     }
 
-    public static final class LargeFireball {
+    public static final class Fireball {
         public static final DataKey<ItemStack> ITEM_STACK = DataKey.create(
                 8,
                 new EntityDataAccessor<>(8, EntityDataSerializers.ITEM_STACK),
@@ -222,6 +216,167 @@ public final class DataKeys {
                 8,
                 new EntityDataAccessor<>(8, EntityDataSerializers.ITEM_STACK),
                 ItemStack.EMPTY
+        );
+    }
+
+    public static final class PrimedTNT {
+        public static final DataKey<Integer> FUSE_TICKS = DataKey.create(
+                8,
+                new EntityDataAccessor<>(8, EntityDataSerializers.INT),
+                80
+        );
+
+        public static final DataKey<BlockState> BLOCK_STATE = DataKey.create(
+                9,
+                new EntityDataAccessor<>(9, EntityDataSerializers.BLOCK_STATE),
+                Blocks.TNT.defaultBlockState()
+        );
+    }
+
+    public static final class Display {
+        public static final DataKey<Integer> INTERPOLATION_DELAY = DataKey.create(
+                8,
+                new EntityDataAccessor<>(8, EntityDataSerializers.INT),
+                0
+        );
+
+        public static final DataKey<Integer> TRANSFORMATION_INTERPOLATION_DURATION = DataKey.create(
+                9,
+                new EntityDataAccessor<>(9, EntityDataSerializers.INT),
+                0
+        );
+
+        public static final DataKey<Integer> TELEPORT_DURATION = DataKey.create(
+                10,
+                new EntityDataAccessor<>(10, EntityDataSerializers.INT),
+                0
+        );
+
+        public static final DataKey<Vector3f> TRANSLATION = DataKey.create(
+                11,
+                new EntityDataAccessor<>(11, EntityDataSerializers.VECTOR3),
+                new Vector3f(0, 0, 0)
+        );
+
+        public static final DataKey<Vector3f> SCALE = DataKey.create(
+                12,
+                new EntityDataAccessor<>(12, EntityDataSerializers.VECTOR3),
+                new Vector3f(1, 1, 1)
+        );
+
+        public static final DataKey<Quaternionf> ROTATION_LEFT = DataKey.create(
+                13,
+                new EntityDataAccessor<>(13, EntityDataSerializers.QUATERNION),
+                new Quaternionf(0, 0, 0, 1)
+        );
+
+        public static final DataKey<Quaternionf> ROTATION_RIGHT = DataKey.create(
+                14,
+                new EntityDataAccessor<>(14, EntityDataSerializers.QUATERNION),
+                new Quaternionf(0, 0, 0, 1)
+        );
+
+        public static final DataKey<Byte> BILLBOARD_CONSTRAINTS = DataKey.create(
+                15,
+                new EntityDataAccessor<>(15, EntityDataSerializers.BYTE),
+                (byte) 0
+        );
+
+        public static final DataKey<Integer> BRIGHTNESS_OVERRIDE = DataKey.create(
+                16,
+                new EntityDataAccessor<>(16, EntityDataSerializers.INT),
+                -1
+        );
+
+        public static final DataKey<Float> VIEW_RANGE = DataKey.create(
+                17,
+                new EntityDataAccessor<>(17, EntityDataSerializers.FLOAT),
+                1f
+        );
+
+        public static final DataKey<Float> SHADOW_RADIUS = DataKey.create(
+                18,
+                new EntityDataAccessor<>(18, EntityDataSerializers.FLOAT),
+                0f
+        );
+
+        public static final DataKey<Float> SHADOW_STRENGTH = DataKey.create(
+                19,
+                new EntityDataAccessor<>(19, EntityDataSerializers.FLOAT),
+                1f
+        );
+
+        public static final DataKey<Float> WIDTH = DataKey.create(
+                20,
+                new EntityDataAccessor<>(20, EntityDataSerializers.FLOAT),
+                0f
+        );
+
+        public static final DataKey<Float> HEIGHT = DataKey.create(
+                21,
+                new EntityDataAccessor<>(21, EntityDataSerializers.FLOAT),
+                0f
+        );
+
+        public static final DataKey<Integer> GLOW_COLOR_OVERRIDE = DataKey.create(
+                22,
+                new EntityDataAccessor<>(22, EntityDataSerializers.INT),
+                -1
+        );
+    }
+
+    public static final class BlockDisplay {
+        public static final DataKey<BlockState> BLOCK_STATE = DataKey.create(
+                23,
+                new EntityDataAccessor<>(23, EntityDataSerializers.BLOCK_STATE),
+                Blocks.AIR.defaultBlockState()
+        );
+    }
+
+    public static final class ItemDisplay {
+        public static final DataKey<ItemStack> ITEM_STACK = DataKey.create(
+                23,
+                new EntityDataAccessor<>(23, EntityDataSerializers.ITEM_STACK),
+                ItemStack.EMPTY
+        );
+
+        public static final DataKey<Byte> DISPLAY_TYPE = DataKey.create(
+                24,
+                new EntityDataAccessor<>(24, EntityDataSerializers.BYTE),
+                (byte) 0
+        );
+    }
+
+    public static final class TextDisplay {
+        public static final DataKey<Component> TEXT = DataKey.create(
+                23,
+                new EntityDataAccessor<>(23, EntityDataSerializers.COMPONENT),
+                Component.empty()
+        );
+
+        public static final DataKey<Integer> LINE_WIDTH = DataKey.create(
+                24,
+                new EntityDataAccessor<>(24, EntityDataSerializers.INT),
+                200
+        );
+
+        public static final DataKey<Integer> BACKGROUND_COLOR = DataKey.create(
+                25,
+                new EntityDataAccessor<>(25, EntityDataSerializers.INT),
+                1073741824
+        );
+
+        public static final DataKey<Byte> TEXT_OPACITY = DataKey.create(
+                26,
+                new EntityDataAccessor<>(26, EntityDataSerializers.BYTE),
+                (byte) -1
+        );
+
+        // TODO make metadata enum
+        public static final DataKey<Byte> TEXT_DISPLAY_OPTIONS = DataKey.create(
+                27,
+                new EntityDataAccessor<>(27, EntityDataSerializers.BYTE),
+                (byte) 0
         );
     }
 

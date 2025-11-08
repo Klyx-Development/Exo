@@ -28,7 +28,9 @@ public class BaseEntity extends AbstractEntity {
 
     @Override
     public void onSpawn() {
-        onSpawn.accept(Optional.empty());
+        if (onSpawn != null) {
+            onSpawn.accept(Optional.empty());
+        }
     }
 
     public void onSpawn(Consumer<Optional<?>> consumer) {
@@ -37,7 +39,9 @@ public class BaseEntity extends AbstractEntity {
 
     @Override
     public void onDespawn() {
-        onDespawn.accept(Optional.empty());
+        if (onDespawn != null) {
+            onDespawn.accept(Optional.empty());
+        }
     }
 
     public void onDespawn(Consumer<Optional<?>> consumer) {
@@ -46,7 +50,9 @@ public class BaseEntity extends AbstractEntity {
 
     @Override
     public void onViewerAdded(Player player) {
-        onViewerAdded.accept(player);
+        if (onViewerAdded != null) {
+            onViewerAdded.accept(player);
+        }
     }
 
     public void onViewerAdded(Consumer<Player> callback) {
@@ -55,7 +61,9 @@ public class BaseEntity extends AbstractEntity {
 
     @Override
     public void onViewerRemoved(Player player) {
-        onViewerRemoved.accept(player);
+        if (onViewerRemoved != null) {
+            onViewerRemoved.accept(player);
+        }
     }
 
     public void onViewerRemoved(Consumer<Player> callback) {

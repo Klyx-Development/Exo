@@ -4,9 +4,9 @@ import org.bukkit.entity.EntityType;
 import org.klyx.exo.data.keys.DataKeys;
 import org.klyx.exo.entities.base.BaseEntity;
 
-public class PacketLargeFireball extends BaseEntity {
-    public PacketLargeFireball() {
-        super(EntityType.FIREBALL);
+public class PacketSmallFireball extends BaseEntity {
+    public PacketSmallFireball() {
+        super(EntityType.SMALL_FIREBALL);
     }
 
     @Override
