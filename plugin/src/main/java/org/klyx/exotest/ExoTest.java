@@ -7,14 +7,15 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 import org.klyx.exo.Exo;
-import org.klyx.exo.entities.base.BaseLivingEntity;
 import org.klyx.exo.entities.specific.entity.PacketAreaEffectCloud;
+import org.klyx.exo.entities.specific.entity.displays.PacketBlockDisplay;
+import org.klyx.exo.entities.specific.entity.displays.PacketItemDisplay;
 import org.klyx.exo.entities.specific.livingentity.PacketArmorStand;
 
 public class ExoTest extends JavaPlugin {
@@ -30,16 +31,16 @@ public class ExoTest extends JavaPlugin {
                     Commands.literal("testspawn")
                             .then(Commands.literal("zombie")
                                 .executes(ctx -> {
-                                    BaseLivingEntity entity = new BaseLivingEntity(EntityType.ZOMBIE);
-                                    entity.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-                                    entity.spawn(ctx.getSource().getLocation());
-                                    entity.showTo((Player) ctx.getSource().getSender());
+//                                    BaseLivingEntity entity = new BaseLivingEntity(EntityType.ZOMBIE);
+//                                    entity.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+//                                    entity.spawn(ctx.getSource().getLocation());
+//                                    entity.showTo((Player) ctx.getSource().getSender());
 
                                     PacketArmorStand stand = new PacketArmorStand();
                                     stand.spawn(ctx.getSource().getLocation());
                                     stand.showTo((Player) ctx.getSource().getSender());
 
-                                    stand.addPassenger(entity.getEntityId());
+                                    stand.addPassenger(((Player) ctx.getSource().getSender()).getEntityId());
 
                                     return Command.SINGLE_SUCCESS;
                                 }))
@@ -48,10 +49,30 @@ public class ExoTest extends JavaPlugin {
                                     PacketAreaEffectCloud cloud = new PacketAreaEffectCloud();
                                     //cloud.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
                                     cloud.spawn(ctx.getSource().getLocation());
-                                    cloud.showTo((Player) ctx.getSource().getSender());
                                     cloud.onViewerAdded(player -> {
                                         Bukkit.broadcast(Component.text("woah"));
                                     });
+                                    cloud.showTo((Player) ctx.getSource().getSender());
+
+                                    return Command.SINGLE_SUCCESS;
+                                }))
+                            .then(Commands.literal("display")
+                                .executes(ctx -> {
+                                    PacketBlockDisplay display = new PacketBlockDisplay();
+                                    display.setBlock(Bukkit.createBlockData(Material.DIAMOND_BLOCK));
+
+                                    display.spawn(ctx.getSource().getLocation());
+                                    display.showTo((Player) ctx.getSource().getSender());
+
+                                    display.setScale(new Vector(0, 0, 0));
+                                    display.setInterpolationDuration(10);
+                                    display.setInterpolationDelay(-1);
+
+                                    Bukkit.getScheduler().runTaskLater(this, () -> {
+                                        display.setTranslation(new Vector(-0.5, -0.5, -0.5));
+                                        display.setScale(new Vector(1, 1, 1));
+                                        Bukkit.getScheduler().runTaskLater(this, display::despawn, 10L);
+                                    }, 1L);
 
                                     return Command.SINGLE_SUCCESS;
                                 }))

@@ -52,7 +52,7 @@ public abstract class AbstractEntity {
         this.entityType = entityType;
         this.name = "entity-" + entityUUID.toString().substring(0, 8);
 
-        this.entityMetadata = new EntityMetadata(entityId);
+        this.entityMetadata = new EntityMetadata(this);
         this.viewerRegistry = new ViewerRegistry(this);
         this.spatialComponent = new SpatialComponent(this);
         this.mountComponent = new MountComponent(this);
