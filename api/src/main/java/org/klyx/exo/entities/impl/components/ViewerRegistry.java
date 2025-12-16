@@ -1,9 +1,13 @@
 package org.klyx.exo.entities.impl.components;
 
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
+import net.minecraft.network.protocol.game.ClientboundSetCameraPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.klyx.exo.data.entity.EntityState;
 import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.entities.impl.AbstractLivingEntity;
@@ -50,6 +54,31 @@ public class ViewerRegistry {
         if (viewers.remove(player)) {
             PacketUtil.sendPacket(player, new ClientboundRemoveEntitiesPacket(entity.getEntityId()));
             entity.onViewerRemoved(player);
+        }
+    }
+
+    public void spectate(Player player) {
+        if (!hasViewer(player)) return;
+
+        ClientboundSetCameraPacket packet = createCameraPacket(entity.getEntityId());
+        PacketUtil.sendPacket(player, packet);
+    }
+
+    public void unspectate(Player player) {
+        if (!hasViewer(player)) return;
+
+        ClientboundSetCameraPacket packet = createCameraPacket(player.getEntityId());
+        PacketUtil.sendPacket(player, packet);
+    }
+
+    private ClientboundSetCameraPacket createCameraPacket(int entityId) {
+        try {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+            buffer.writeVarInt(entityId);
+
+            return ClientboundSetCameraPacket.class.getDeclaredConstructor(FriendlyByteBuf.class).newInstance(buffer);
+        } catch (Exception e) {
+            throw new RuntimeException("Something went wrong trying to create camera packet for entity with id " + entityId + ", " + e.getMessage());
         }
     }
 

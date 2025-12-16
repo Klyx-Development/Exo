@@ -145,6 +145,14 @@ public abstract class AbstractEntity {
         return viewerRegistry.hasViewer(player);
     }
 
+    public void spectate(@NotNull Player player) {
+        viewerRegistry.spectate(player);
+    }
+
+    public void unspectate(@NotNull Player player) {
+        viewerRegistry.unspectate(player);
+    }
+
     public abstract void onViewerAdded(Player player);
 
     public abstract void onViewerRemoved(Player player);
