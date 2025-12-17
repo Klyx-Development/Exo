@@ -13,6 +13,7 @@ import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.entities.impl.AbstractLivingEntity;
 import org.klyx.exo.utils.PacketUtil;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -76,7 +77,11 @@ public class ViewerRegistry {
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeVarInt(entityId);
 
-            return ClientboundSetCameraPacket.class.getDeclaredConstructor(FriendlyByteBuf.class).newInstance(buffer);
+            Constructor<ClientboundSetCameraPacket> constructor =
+                    ClientboundSetCameraPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
+            constructor.setAccessible(true);
+
+            return constructor.newInstance(buffer);
         } catch (Exception e) {
             throw new RuntimeException("Something went wrong trying to create camera packet for entity with id " + entityId + ", " + e.getMessage());
         }

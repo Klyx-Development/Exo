@@ -5,6 +5,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import org.klyx.exo.data.keys.DataKeys;
+import org.klyx.exo.data.metadata.BillboardConstraints;
 import org.klyx.exo.entities.base.BaseEntity;
 import org.klyx.exo.utils.MathUtil;
 
@@ -60,5 +61,9 @@ public abstract class AbstractPacketDisplay extends BaseEntity {
 
     public void setRotationRight(Vector vector) {
         setMetadata(DataKeys.Display.ROTATION_RIGHT, MathUtil.eulerToQuaternion(vector.getX(), vector.getY(), vector.getZ()));
+    }
+
+    public void setBillboardConstraints(BillboardConstraints billboardConstraints) {
+        setMetadata(DataKeys.Display.BILLBOARD_CONSTRAINTS, (byte) billboardConstraints.getValue());
     }
 }
