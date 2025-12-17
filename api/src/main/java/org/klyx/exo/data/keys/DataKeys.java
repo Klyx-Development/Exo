@@ -9,13 +9,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.bukkit.craftbukkit.block.CraftBlockStates;
-import org.bukkit.craftbukkit.block.impl.CraftTnt;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -340,7 +336,7 @@ public final class DataKeys {
                 ItemStack.EMPTY
         );
 
-        public static final DataKey<Byte> DISPLAY_TYPE = DataKey.create(
+        public static final DataKey<Byte> DISPLAY_TRANSFORM = DataKey.create(
                 24,
                 new EntityDataAccessor<>(24, EntityDataSerializers.BYTE),
                 (byte) 0
