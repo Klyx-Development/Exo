@@ -1,5 +1,6 @@
 package org.klyx.exo.storage;
 
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.klyx.exo.entities.impl.AbstractEntity;
 
@@ -12,10 +13,8 @@ public class EntityStorage {
 
     private static final Map<Integer, AbstractEntity> entities = new ConcurrentHashMap<>();
 
-    private static final AtomicInteger entityIds = new AtomicInteger(1000000);
-
     public static int newEntityId() {
-        return entityIds.incrementAndGet();
+        return Entity.nextEntityId();
     }
 
     public static void addEntity(@NotNull AbstractEntity entity) {

@@ -76,7 +76,25 @@ public class PacketUtil {
         } finally {
             buffer.release();
         }
+    }
 
+    public static @NotNull ClientboundSetPassengersPacket createPassengerPacket(int vehicleId, @NotNull List<Integer> passengerIds) {
+        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            buffer.writeVarInt(vehicleId);
+
+            int[] passengerArray = passengerIds.stream().mapToInt(Integer::intValue).toArray();
+            buffer.writeVarIntArray(passengerArray);
+
+            Constructor<ClientboundSetPassengersPacket> packet = ClientboundSetPassengersPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
+            packet.setAccessible(true);
+
+            return packet.newInstance(buffer);
+        } catch (Exception e) {
+            throw new RuntimeException("Something went wrong while creating a passenger packet: " + e.getMessage());
+        } finally {
+            buffer.release();
+        }
     }
 
 }

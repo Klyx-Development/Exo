@@ -7,16 +7,20 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.klyx.exo.Exo;
+import org.klyx.exo.data.metadata.EntityFlags;
+import org.klyx.exo.entities.base.BaseLivingEntity;
 import org.klyx.exo.entities.specific.entity.PacketAreaEffectCloud;
 import org.klyx.exo.entities.specific.entity.displays.PacketBlockDisplay;
 import org.klyx.exo.entities.specific.entity.displays.PacketItemDisplay;
 import org.klyx.exo.entities.specific.livingentity.PacketArmorStand;
+import org.klyx.exo.visibility.VisibilityBuilder;
 
 public class ExoTest extends JavaPlugin {
 
@@ -76,6 +80,21 @@ public class ExoTest extends JavaPlugin {
 
                                     return Command.SINGLE_SUCCESS;
                                 }))
+                            .then(Commands.literal("flagstest")
+                                    .executes(ctx -> {
+                                        BaseLivingEntity zombie = new BaseLivingEntity(EntityType.ZOMBIE);
+                                        zombie.setOnFire(true);
+                                        zombie.setGlowing(true);
+
+                                        zombie.spawn(ctx.getSource().getLocation());
+
+                                        VisibilityBuilder.forEntity(zombie)
+                                                .global()
+                                                .sameWorld()
+                                                .apply();
+
+                                        return Command.SINGLE_SUCCESS;
+                                    }))
 
                             .build()
             );
