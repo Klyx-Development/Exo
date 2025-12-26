@@ -1,6 +1,8 @@
 package org.klyx.exo.data.metadata;
 
-public enum EntityFlags {
+import org.klyx.exo.data.metadata.flag.FlagEnum;
+
+public enum EntityFlags implements FlagEnum {
     ON_FIRE(0),
     CROUCHING(1),
     SPRINTING(3),
@@ -9,10 +11,14 @@ public enum EntityFlags {
     GLOWING(6),
     ELYTRA_FLYING(7);
 
-    private int value;
+    private final int bitPosition;
 
-    EntityFlags(int value) {
-        this.value = value;
+    EntityFlags(int bitPosition) {
+        this.bitPosition = bitPosition;
     }
 
+    @Override
+    public int getBitPosition() {
+        return bitPosition;
+    }
 }

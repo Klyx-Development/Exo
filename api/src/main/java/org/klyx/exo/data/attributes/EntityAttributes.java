@@ -1,7 +1,7 @@
 package org.klyx.exo.data.attributes;
 
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import org.bukkit.NamespacedKey;
 import org.klyx.exo.entities.impl.AbstractEntity;
@@ -45,7 +45,7 @@ public class EntityAttributes {
                 .findFirst()
                 .ifPresent(entry ->{
                     NamespacedKey modifierId = modifier.getKey();
-                    entry.removeModifier(ResourceLocation.fromNamespaceAndPath(modifierId.getNamespace(), modifierId.getKey()));
+                    entry.removeModifier(Identifier.fromNamespaceAndPath(modifierId.getNamespace(), modifierId.getKey()));
                 });
         refresh();
     }

@@ -19,8 +19,8 @@ public class AttributeEntry extends AttributeInstance {
     private final List<AttributeModifier> modifiers = new ArrayList<>();
 
     public AttributeEntry(org.bukkit.attribute.Attribute attribute, double value) {
-        super(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(CraftAttribute.bukkitToMinecraft(attribute)), instance -> {});
-        this.attributeHolder = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(CraftAttribute.bukkitToMinecraft(attribute));
+        super(CraftAttribute.bukkitToMinecraftHolder(attribute), instance -> {});
+        this.attributeHolder = CraftAttribute.bukkitToMinecraftHolder(attribute);
         this.value = value;
         setBaseValue(value);
     }

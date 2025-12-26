@@ -1,5 +1,7 @@
 package org.klyx.exo.entities.impl;
 
+import net.minecraft.world.entity.Entity;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,7 +13,9 @@ import org.klyx.exo.data.entity.EntityState;
 import org.klyx.exo.data.entity.StateTransition;
 import org.klyx.exo.data.keys.DataKey;
 import org.klyx.exo.data.keys.DataKeys;
+import org.klyx.exo.data.metadata.EntityFlags;
 import org.klyx.exo.data.metadata.EntityMetadata;
+import org.klyx.exo.data.metadata.flag.ByteFlagManager;
 import org.klyx.exo.entities.impl.components.MountComponent;
 import org.klyx.exo.entities.impl.components.SpatialComponent;
 import org.klyx.exo.entities.impl.components.ViewerRegistry;
@@ -35,6 +39,8 @@ public abstract class AbstractEntity {
 
     protected EntityState state = EntityState.NONE;
     private final Map<EntityState, List<Consumer<StateTransition>>> stateListeners = new EnumMap<>(EntityState.class);
+    private final ByteFlagManager<EntityFlags> flagManager =
+            new ByteFlagManager<>(EntityFlags.class, flags -> setMetadata(DataKeys.Entity.FLAGS, flags));
 
     // Components
     private final ViewerRegistry viewerRegistry;
@@ -70,6 +76,114 @@ public abstract class AbstractEntity {
         setMetadata(DataKeys.Entity.FLAGS);
     }
 
+    public void setAirTicks(int airTicks) {
+        setMetadata(DataKeys.Entity.AIR_TICKS, airTicks);
+    }
+
+    public int getAirTicks() {
+        return getMetadata(DataKeys.Entity.AIR_TICKS);
+    }
+
+    public void setPose(Pose pose) {
+        setMetadata(DataKeys.Entity.POSE, ConversionUtil.bukkitToMinecraft(pose));
+    }
+
+    public Pose getPose() {
+        return ConversionUtil.minecraftToBukkit(getMetadata(DataKeys.Entity.POSE));
+    }
+
+    public void setSilent(boolean silent) {
+        setMetadata(DataKeys.Entity.SILENT, silent);
+    }
+
+    public boolean isSilent() {
+        return getMetadata(DataKeys.Entity.SILENT);
+    }
+
+    public void setFrozenTicks(int frozenTicks) {
+        setMetadata(DataKeys.Entity.FROZEN_TICKS, frozenTicks);
+    }
+
+    public int getFrozenTicks() {
+        return getMetadata(DataKeys.Entity.FROZEN_TICKS);
+    }
+
+    public void setOnFire(boolean onFire) {
+        flagManager.setFlag(EntityFlags.ON_FIRE, onFire);
+    }
+
+    public boolean isOnFire() {
+        return flagManager.hasFlag(EntityFlags.ON_FIRE);
+    }
+
+    public void setCrouching(boolean crouching) {
+        flagManager.setFlag(EntityFlags.CROUCHING, crouching);
+    }
+
+    public boolean isCrouching() {
+        return flagManager.hasFlag(EntityFlags.CROUCHING);
+    }
+
+    public void setSprinting(boolean sprinting) {
+        flagManager.setFlag(EntityFlags.SPRINTING, sprinting);
+    }
+
+    public boolean isSprinting() {
+        return flagManager.hasFlag(EntityFlags.SPRINTING);
+    }
+
+    public void setSwimming(boolean swimming) {
+        flagManager.setFlag(EntityFlags.SWIMMING, swimming);
+    }
+
+    public boolean isSwimming() {
+        return flagManager.hasFlag(EntityFlags.SWIMMING);
+    }
+
+    public void setInvisible(boolean invisible) {
+        flagManager.setFlag(EntityFlags.INVISIBLE, invisible);
+    }
+
+    public boolean isInvisible() {
+        return flagManager.hasFlag(EntityFlags.INVISIBLE);
+    }
+
+    public void setGlowing(boolean glowing) {
+        flagManager.setFlag(EntityFlags.GLOWING, glowing);
+    }
+
+    public boolean isGlowing() {
+        return flagManager.hasFlag(EntityFlags.GLOWING);
+    }
+
+    public void setElytraFlying(boolean flying) {
+        flagManager.setFlag(EntityFlags.ELYTRA_FLYING, flying);
+    }
+
+    public boolean isElytraFlying() {
+        return flagManager.hasFlag(EntityFlags.ELYTRA_FLYING);
+    }
+
+    public void setEntityFlag(EntityFlags flag, boolean value) {
+        flagManager.setFlag(flag, value);
+    }
+
+    public boolean hasEntityFlag(EntityFlags flag) {
+        return flagManager.hasFlag(flag);
+    }
+
+    public void setEntityFlags(EntityFlags... flags) {
+        flagManager.setFlags(flags);
+    }
+
+    public void clearEntityFlag(EntityFlags flag) {
+        flagManager.clearFlag(flag);
+    }
+
+    public void clearAllEntityFlags() {
+        flagManager.clearAll();
+    }
+
     public abstract void applyExtraMetadata();
 
     public <T> void setMetadata(DataKey<T> key, T value) {
@@ -78,6 +192,10 @@ public abstract class AbstractEntity {
 
     public <T> void setMetadata(DataKey<T> key) {
         entityMetadata.set(key);
+    }
+
+    public <T> T getMetadata(DataKey<T> key) {
+        return entityMetadata.get(key);
     }
 
     public void transitionEntityState(@NotNull EntityState newState) {
@@ -185,6 +303,22 @@ public abstract class AbstractEntity {
         mountComponent.removePassenger(passengerEntity.getEntityId());
     }
 
+    public void mount(AbstractEntity entity) {
+        mountComponent.mount(entity);
+    }
+
+    public void mount(Entity serverEntity) {
+        mountComponent.mount(serverEntity);
+    }
+
+    public void mount(org.bukkit.entity.Entity serverEntity) {
+        mountComponent.mount(((CraftEntity) serverEntity).getHandle());
+    }
+
+    public void dismount() {
+        mountComponent.dismount();
+    }
+
     public List<Integer> getPassengers() {
         return mountComponent.getPassengers();
     }
@@ -197,7 +331,7 @@ public abstract class AbstractEntity {
         return EntityStorage.getEntity(mountComponent.getRidingEntityId());
     }
 
-    public AbstractEntity getEntity() {return this;}
+    public AbstractEntity getEntity() { return this;}
 
     public int getEntityId() {
         return entityId;
@@ -213,6 +347,11 @@ public abstract class AbstractEntity {
 
     public EntityState getState() {
         return state;
+    }
+
+    @ApiStatus.Internal
+    public ByteFlagManager<EntityFlags> getFlagManager() {
+        return flagManager;
     }
 
     @ApiStatus.Internal

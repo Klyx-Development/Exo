@@ -24,6 +24,7 @@ public class SpatialComponent {
 
     public void teleportTo(@NotNull Location location) {
         if (entity.getState() != EntityState.ALIVE) return;
+        if (entity.getVehicle() != null) entity.
 
         updateLocation(location);
 

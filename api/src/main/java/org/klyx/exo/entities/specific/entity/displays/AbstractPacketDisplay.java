@@ -1,8 +1,11 @@
 package org.klyx.exo.entities.specific.entity.displays;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.klyx.exo.data.keys.DataKeys;
 import org.klyx.exo.data.metadata.BillboardConstraints;
@@ -65,5 +68,27 @@ public abstract class AbstractPacketDisplay extends BaseEntity {
 
     public void setBillboardConstraints(BillboardConstraints billboardConstraints) {
         setMetadata(DataKeys.Display.BILLBOARD_CONSTRAINTS, (byte) billboardConstraints.getValue());
+    }
+
+    public void setTransform(@NotNull Matrix4f matrix) {
+        Vector3f translation = new Vector3f();
+        Vector3f scale = new Vector3f();
+        Quaternionf rotation = new Quaternionf();
+
+        matrix.getTranslation(translation);
+        matrix.getScale(scale);
+        matrix.getUnnormalizedRotation(rotation);
+
+        setMetadata(DataKeys.Display.TRANSLATION, translation);
+        setMetadata(DataKeys.Display.SCALE, scale);
+        setMetadata(DataKeys.Display.ROTATION_LEFT, rotation);
+        setMetadata(DataKeys.Display.ROTATION_RIGHT, new Quaternionf());
+    }
+
+    public void setTransform(Transformation transformation) {
+        setMetadata(DataKeys.Display.TRANSLATION, transformation.getTranslation());
+        setMetadata(DataKeys.Display.SCALE, transformation.getScale());
+        setMetadata(DataKeys.Display.ROTATION_LEFT, transformation.getLeftRotation());
+        setMetadata(DataKeys.Display.ROTATION_RIGHT, transformation.getRightRotation());
     }
 }

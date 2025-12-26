@@ -5,6 +5,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.klyx.exo.data.keys.DataKey;
 import org.klyx.exo.entities.impl.AbstractEntity;
 import org.klyx.exo.storage.EntityStorage;
@@ -48,7 +49,7 @@ public class EntityMetadata {
         metadata.put(index, entry);
     }
 
-    public <T> @Nullable T get(@NotNull DataKey<T> key) {
+    public <T> @UnknownNullability T get(@NotNull DataKey<T> key) {
         T value = getIndex(key.getIndex());
         return value != null ? value : key.getDefaultValue();
     }

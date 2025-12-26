@@ -35,7 +35,6 @@ public abstract class AbstractLivingEntity extends AbstractEntity {
     protected void initDefaultMetadata() {
         super.initDefaultMetadata();
 
-
         entityMetadata.set(DataKeys.LivingEntity.HAND_STATES);
         entityMetadata.set(DataKeys.LivingEntity.HEALTH);
         entityMetadata.set(DataKeys.LivingEntity.PARTICLES);

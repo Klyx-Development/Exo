@@ -13,7 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.List;
 import java.util.Optional;
@@ -248,25 +250,25 @@ public final class DataKeys {
                 0
         );
 
-        public static final DataKey<Vector3f> TRANSLATION = DataKey.create(
+        public static final DataKey<Vector3fc> TRANSLATION = DataKey.create(
                 11,
                 new EntityDataAccessor<>(11, EntityDataSerializers.VECTOR3),
                 new Vector3f(0, 0, 0)
         );
 
-        public static final DataKey<Vector3f> SCALE = DataKey.create(
+        public static final DataKey<Vector3fc> SCALE = DataKey.create(
                 12,
                 new EntityDataAccessor<>(12, EntityDataSerializers.VECTOR3),
                 new Vector3f(1, 1, 1)
         );
 
-        public static final DataKey<Quaternionf> ROTATION_LEFT = DataKey.create(
+        public static final DataKey<Quaternionfc> ROTATION_LEFT = DataKey.create(
                 13,
                 new EntityDataAccessor<>(13, EntityDataSerializers.QUATERNION),
                 new Quaternionf(0, 0, 0, 1)
         );
 
-        public static final DataKey<Quaternionf> ROTATION_RIGHT = DataKey.create(
+        public static final DataKey<Quaternionfc> ROTATION_RIGHT = DataKey.create(
                 14,
                 new EntityDataAccessor<>(14, EntityDataSerializers.QUATERNION),
                 new Quaternionf(0, 0, 0, 1)

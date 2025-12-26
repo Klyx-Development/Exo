@@ -47,7 +47,7 @@ tasks {
         options.encoding = Charsets.UTF_8.name()
     }
 
-    val version = "1.21.8"
+    val version = "1.21.11"
     val javaVersion = JavaLanguageVersion.of(21)
 
     val jvmArgsExternal = listOf(
