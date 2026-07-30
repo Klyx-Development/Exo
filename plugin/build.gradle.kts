@@ -1,4 +1,6 @@
 import org.gradle.kotlin.dsl.*
+import sun.jvmstat.monitor.MonitoredVmUtil.jvmArgs
+import sun.tools.jar.resources.jar
 
 plugins {
     `java-library`
@@ -9,13 +11,12 @@ plugins {
 
 java {
     disableAutoTargetJvm()
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 dependencies {
     compileOnly(libs.paper.api)
-
-    implementation(project(":api"))
+    implementation(project(":paper"))
 }
 
 tasks {
@@ -27,7 +28,7 @@ tasks {
         archiveFileName = "${rootProject.name}-test-${project.version}.jar"
         archiveClassifier = null
 
-        from(project(":api").sourceSets.main.get().output)
+        from(project(":paper").sourceSets.main.get().output)
 
         manifest {
             attributes["Implementation-Version"] = rootProject.version
@@ -40,15 +41,15 @@ tasks {
 
     withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release = 21
+        options.release = 25
     }
 
     withType<Javadoc>() {
         options.encoding = Charsets.UTF_8.name()
     }
 
-    val version = "1.21.11"
-    val javaVersion = JavaLanguageVersion.of(21)
+    val version = "26.2"
+    val javaVersion = JavaLanguageVersion.of(25)
 
     val jvmArgsExternal = listOf(
         "-Dcom.mojang.eula.agree=true"
