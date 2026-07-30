@@ -5,14 +5,15 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$USER_HOME$/Gradle/gradle-8.11.1" />
+        <option name="gradleJvm" value="25" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/api" />
+            <option value="$PROJECT_DIR$/paper" />
             <option value="$PROJECT_DIR$/plugin" />
           </set>
         </option>
+        <option name="myGradleHome" value="C:\Users\asleep\Gradle\gradle-8.11.1" />
       </GradleProjectSettings>
     </option>
   </component>
