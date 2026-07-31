@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.klyx.exo.Exo;
 import org.klyx.exo.entity.components.types.PassengerComponent;
+import org.klyx.exo.entity.meta.types.entity.living.avatar.MannequinMeta;
 import org.klyx.exo.entity.meta.types.entity.living.mob.creatures.ZombieMeta;
 
 public class ExoTest extends JavaPlugin {
@@ -36,6 +37,19 @@ public class ExoTest extends JavaPlugin {
                                     }, 20 * 5);
 
                                     this.getServer().getScheduler().runTaskLater(this, zombie::destroy, 20 * 20);
+
+                                    return Command.SINGLE_SUCCESS;
+                                }))
+                            .then(Commands.literal("mannequin")
+                                .executes(ctx -> {
+                                    TestMannequin mannequin = new TestMannequin();
+                                    if (!(ctx.getSource().getExecutor() instanceof Player player)) return Command.SINGLE_SUCCESS;
+
+                                    mannequin.spawn(player.getLocation());
+                                    mannequin.editMeta(MannequinMeta.class, meta -> meta.setProfile(player));
+                                    mannequin.addViewer(player);
+
+                                    this.getServer().getScheduler().runTaskLater(this, mannequin::destroy, 20 * 20);
 
                                     return Command.SINGLE_SUCCESS;
                                 }))

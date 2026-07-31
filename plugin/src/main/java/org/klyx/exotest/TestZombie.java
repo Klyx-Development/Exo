@@ -4,7 +4,7 @@ import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NonNull;
 import org.klyx.exo.entity.ExoEntity;
 import org.klyx.exo.entity.components.types.PassengerComponent;
-import org.klyx.exo.entity.components.types.TickComponent;
+import org.klyx.exo.entity.components.types.tick.TickComponent;
 import org.klyx.exo.entity.data.EntityData;
 import org.klyx.exo.entity.meta.types.entity.living.mob.creatures.ZombieMeta;
 

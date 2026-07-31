@@ -51,6 +51,18 @@ public class ViewerManager {
         return Collections.unmodifiableSet(snapshot);
     }
 
+    public @UnmodifiableView Set<UUID> getActiveViewers() {
+        return Collections.unmodifiableSet(this.viewers);
+    }
+
+    public @UnmodifiableView Set<UUID> getUnloadedViewers() {
+        return Collections.unmodifiableSet(this.unloadedViewers);
+    }
+
+    public @UnmodifiableView Set<UUID> getExplicitViewers() {
+        return Collections.unmodifiableSet(this.explicitViewers);
+    }
+
     public boolean isViewer(UUID uuid) {
         return this.viewers.contains(uuid) || this.unloadedViewers.contains(uuid);
     }
