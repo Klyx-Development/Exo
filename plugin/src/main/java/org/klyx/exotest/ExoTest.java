@@ -49,7 +49,6 @@ public class ExoTest extends JavaPlugin {
                                     mannequin.editMeta(MannequinMeta.class, meta -> meta.setProfile(player));
                                     mannequin.addViewer(player);
 
-                                    this.getServer().getScheduler().runTaskLater(this, mannequin::destroy, 20 * 20);
 
                                     return Command.SINGLE_SUCCESS;
                                 }))

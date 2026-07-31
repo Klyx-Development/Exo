@@ -10,27 +10,27 @@ import org.klyx.exo.entity.events.EntityTickEvent;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class TickComponent implements EntityComponent {
 
     private static final Set<ExoEntity> TO_TICK_ENTITIES = ConcurrentHashMap.newKeySet();
     private static @Nullable BukkitTask tickHandler = null;
 
-    private final @Nullable Consumer<EntityTickEvent> onTick;
+    private final @Nullable BiConsumer<ExoEntity, EntityTickEvent> onTick;
 
     public TickComponent() {
         this(null);
     }
 
-    public TickComponent(@Nullable Consumer<EntityTickEvent> onTick) {
+    public TickComponent(@Nullable BiConsumer<ExoEntity, EntityTickEvent> onTick) {
         this.onTick = onTick;
     }
 
     @Override
     public void initialize(ExoEntity entity) {
         if (onTick != null) {
-            entity.eventBus().subscribe(EntityTickEvent.class, onTick);
+            entity.eventBus().subscribe(EntityTickEvent.class, event -> onTick.accept(entity, event));
         }
 
         synchronized (TO_TICK_ENTITIES) {
@@ -43,7 +43,7 @@ public class TickComponent implements EntityComponent {
                 @Override
                 public void run() {
                     this.tickCounter++;
-                    EntityTickEvent tickEvent = new EntityTickEvent(this.tickCounter, entity);
+                    EntityTickEvent tickEvent = new EntityTickEvent(this.tickCounter);
                     for (ExoEntity toTick : TO_TICK_ENTITIES) {
                         toTick.eventBus().post(tickEvent);
                     }
