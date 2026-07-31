@@ -165,6 +165,18 @@ public abstract class ExoEntity {
         return viewerManager.getViewers();
     }
 
+    public Set<UUID> getActiveViewers() {
+        return viewerManager.getActiveViewers();
+    }
+
+    public Set<UUID> getUnloadedViewers() {
+        return viewerManager.getUnloadedViewers();
+    }
+
+    public Set<UUID> getExplicitViewers() {
+        return viewerManager.getExplicitViewers();
+    }
+
     public boolean isViewer(UUID uuid) {
         return viewerManager.isViewer(uuid);
     }
@@ -175,6 +187,11 @@ public abstract class ExoEntity {
 
     public ExoEntity addViewer(UUID playerUUID) {
         viewerManager.addViewer(playerUUID, false);
+        return this;
+    }
+
+    public ExoEntity addViewer(Player player) {
+        viewerManager.addViewer(player.getUniqueId(), false);
         return this;
     }
 

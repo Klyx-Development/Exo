@@ -1,4 +1,4 @@
-package org.klyx.exo.entity.components.types;
+package org.klyx.exo.entity.components.types.tick;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -43,7 +43,7 @@ public class TickComponent implements EntityComponent {
                 @Override
                 public void run() {
                     this.tickCounter++;
-                    EntityTickEvent tickEvent = new EntityTickEvent(this.tickCounter);
+                    EntityTickEvent tickEvent = new EntityTickEvent(this.tickCounter, entity);
                     for (ExoEntity toTick : TO_TICK_ENTITIES) {
                         toTick.eventBus().post(tickEvent);
                     }
