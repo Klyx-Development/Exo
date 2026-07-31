@@ -3,7 +3,12 @@ package org.klyx.exo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.Nullable;
 import org.klyx.exo.entity.EntityManager;
+import org.klyx.exo.entity.viewer.BukkitViewerListeners;
 import org.klyx.exo.util.packet.PacketManager;
+import org.slf4j.LoggerFactory;
+import xyz.bitsquidd.bits.Bits;
+import xyz.bitsquidd.bits.log.BasicLogger;
+import xyz.bitsquidd.bits.log.Logger;
 
 public class Exo {
 
@@ -27,6 +32,10 @@ public class Exo {
         Exo.plugin = plugin;
         enabled = true;
         PACKET_MANAGER.register();
+        Bits.generic("Exo");
+        new BasicLogger(LoggerFactory.getLogger("Exo"), Logger.LogFlags.defaultFlags());
+
+        new BukkitViewerListeners(plugin);
     }
 
     public static void destroy() {
