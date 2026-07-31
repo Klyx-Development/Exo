@@ -1,4 +1,4 @@
 @NotNullByDefault
-package org.klyx.exo.entity.meta.types.living.creatures;
+package org.klyx.exo.entity.meta.types.entity.display;
 
 import org.jetbrains.annotations.NotNullByDefault;

@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.klyx.exo.Exo;
 import org.klyx.exo.entity.components.types.PassengerComponent;
-import org.klyx.exo.entity.meta.types.living.creatures.ZombieMeta;
+import org.klyx.exo.entity.meta.types.entity.living.mob.creatures.ZombieMeta;
 
 public class ExoTest extends JavaPlugin {
 

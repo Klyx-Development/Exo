@@ -1,8 +1,7 @@
-package org.klyx.exo.entity.meta.types.living.creatures;
+package org.klyx.exo.entity.meta.types.entity.living.mob.creatures;
 
 import net.minecraft.network.syncher.EntityDataSerializers;
 import org.klyx.exo.entity.meta.impl.MetaAccessor;
-import org.klyx.exo.entity.meta.types.living.CreatureMeta;
 
 public final class ZombieMeta extends CreatureMeta {
 
