@@ -1,7 +1,8 @@
-package org.klyx.exo.entity.meta.types.living;
+package org.klyx.exo.entity.meta.types.entity.living.mob;
 
 import net.minecraft.network.syncher.EntityDataSerializers;
 import org.klyx.exo.entity.meta.impl.MetaAccessor;
+import org.klyx.exo.entity.meta.types.entity.living.LivingEntityMeta;
 
 public abstract class MobMeta extends LivingEntityMeta {
 

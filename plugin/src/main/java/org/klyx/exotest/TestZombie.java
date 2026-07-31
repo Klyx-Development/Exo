@@ -6,7 +6,7 @@ import org.klyx.exo.entity.ExoEntity;
 import org.klyx.exo.entity.components.types.PassengerComponent;
 import org.klyx.exo.entity.components.types.TickComponent;
 import org.klyx.exo.entity.data.EntityData;
-import org.klyx.exo.entity.meta.types.living.creatures.ZombieMeta;
+import org.klyx.exo.entity.meta.types.entity.living.mob.creatures.ZombieMeta;
 
 public class TestZombie extends ExoEntity {
 
