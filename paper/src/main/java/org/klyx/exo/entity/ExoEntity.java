@@ -42,7 +42,6 @@ import java.util.function.Predicate;
 public abstract class ExoEntity {
 
     private final EntityComponentManager entityComponentManager;
-    private final EntityData entityData;
     private final ViewerManager viewerManager;
     private final AttributeStateManager attributesStateManager;
     private @Nullable EntityWorldStateManager worldStateManager;
@@ -50,27 +49,53 @@ public abstract class ExoEntity {
     private final int entityId;
     private final UUID uuid;
 
-    private EntityType entityType;
+    private volatile @Nullable EntityData entityData;
+    private boolean resolvingEntityData;
 
     private volatile boolean isSpawned;
 
     protected ExoEntity() {
         this.entityComponentManager = new EntityComponentManager();
-        this.entityData = define().build();
         this.viewerManager = new ViewerManager(this, new ArrayList<>(), new ArrayList<>());
         this.attributesStateManager = new AttributeStateManager(this, List.of());
 
-        entityData.getComponents().forEach(entityComponentManager::addComponent);
-
-        this.entityType = entityData.getType();
         this.entityId = EntityId.next();
         this.uuid = UUID.randomUUID();
 
-        entityComponentManager.attachAll(this);
         Exo.entityManager().addEntity(this);
     }
 
     public abstract EntityData.Builder define();
+    
+    public final EntityData entityData() {
+        EntityData resolved = this.entityData;
+        return resolved != null ? resolved : resolveEntityData();
+    }
+
+    private synchronized EntityData resolveEntityData() {
+        EntityData resolved = this.entityData;
+        if (resolved != null) return resolved;
+
+        if (resolvingEntityData) {
+            throw new IllegalStateException(
+                    "define() of " + getClass().getName() + " re-entered entity data resolution; "
+                            + "define() must not call accessors that read the entity's data");
+        }
+
+        resolvingEntityData = true;
+        try {
+            EntityData.Builder builder = define();
+            resolved = builder.build();
+            this.entityData = resolved;
+        } finally {
+            resolvingEntityData = false;
+        }
+        
+        resolved.getComponents().forEach(entityComponentManager::addComponent);
+        entityComponentManager.attachAll(this);
+
+        return resolved;
+    }
 
     public int entityId() {
         return entityId;
@@ -81,14 +106,15 @@ public abstract class ExoEntity {
     }
 
     public EntityType entityType() {
-        return entityType;
+        return entityData().getType();
     }
 
     public net.minecraft.world.entity.EntityType<?> nmsEntityType() {
-        return CraftEntityType.bukkitToMinecraft(entityType);
+        return CraftEntityType.bukkitToMinecraft(entityType());
     }
 
     public EventBus eventBus() {
+        entityData();
         return entityComponentManager.eventBus();
     }
 
@@ -97,28 +123,32 @@ public abstract class ExoEntity {
     }
 
     public <C extends EntityComponent> @Nullable C getComponent(Class<C> componentClass) {
+        entityData();
         return entityComponentManager.getComponent(componentClass);
     }
 
     public <C extends EntityComponent> ExoEntity editComponent(Class<C> componentClass, Consumer<C> editor) {
+        entityData();
         entityComponentManager.editComponent(componentClass, editor);
         return this;
     }
 
     public boolean hasComponent(Class<? extends EntityComponent> componentClass) {
+        entityData();
         return entityComponentManager.hasComponent(componentClass);
     }
 
     public @UnmodifiableView Collection<EntityComponent> getComponents() {
+        entityData();
         return entityComponentManager.getComponents();
     }
 
     public <M extends AbstractEntityMeta> @Nullable M getMeta(Class<M> expected) {
-        return entityData.getMeta(expected);
+        return entityData().getMeta(expected);
     }
 
     public @Nullable AbstractEntityMeta entityMeta() {
-        return entityData.getMeta();
+        return entityData().getMeta();
     }
 
     public <M extends AbstractEntityMeta> ExoEntity editMeta(Class<M> metaClass, Consumer<M> editor) {
@@ -135,11 +165,11 @@ public abstract class ExoEntity {
     }
 
     public @Nullable AbstractObjectData getObjectData() {
-        return entityData.getObjectData();
+        return entityData().getObjectData();
     }
 
     public int objectDataValue() {
-        return entityData.getObjectDataValue();
+        return entityData().getObjectDataValue();
     }
 
     public ExoEntity setAttribute(Holder<Attribute> attribute, double value) {
@@ -301,6 +331,8 @@ public abstract class ExoEntity {
     public ExoEntity spawn(Location location) {
         if (isSpawned) return this;
 
+        entityData();
+
         EntitySpawnEvent spawnEvent = new EntitySpawnEvent();
         eventBus().post(spawnEvent);
 
@@ -334,7 +366,7 @@ public abstract class ExoEntity {
         if (!isSpawned) return this;
 
         EntityDespawnEvent event = new EntityDespawnEvent();
-        eventBus().post(event);
+        entityComponentManager.eventBus().post(event);
         if (event.isCancelled()) return this;
 
         Exo.entityManager().untrackWorldPosition(this);
