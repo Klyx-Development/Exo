@@ -52,7 +52,7 @@ dependencies {
 <dependency>
     <groupId>org.klyx.exo</groupId>
     <artifactId>exo</artifactId>
-    <version>VERSION</version>
+    <version>2.0.3</version>
 </dependency>
 ```
 
