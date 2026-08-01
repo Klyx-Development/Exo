@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
-import xyz.bitsquidd.bits.log.Logger;
+import org.klyx.exo.Exo;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -73,7 +73,7 @@ public class EventBus {
             try {
                 listener.invoke(event);
             } catch (Throwable t) {
-                Logger.error("An error occurred while invoking an event handler", t);
+                Exo.logger().error("An error occurred while invoking an event handler", t);
             }
         }
     }

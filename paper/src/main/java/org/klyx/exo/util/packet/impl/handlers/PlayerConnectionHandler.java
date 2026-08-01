@@ -1,8 +1,8 @@
 package org.klyx.exo.util.packet.impl.handlers;
 
 import net.minecraft.network.Connection;
+import org.klyx.exo.Exo;
 import org.klyx.exo.util.packet.impl.Packets;
-import xyz.bitsquidd.bits.log.Logger;
 
 import java.util.NoSuchElementException;
 
@@ -43,7 +43,7 @@ public class PlayerConnectionHandler {
             try {
                 connection.channel.pipeline().remove(key);
             } catch (NoSuchElementException e) {
-                Logger.error("An unexpected error occurred while trying to remove a packet handler from a player.", e);
+                Exo.logger().error("An unexpected error occurred while trying to remove a packet handler from a player.", e);
             }
         }
     }

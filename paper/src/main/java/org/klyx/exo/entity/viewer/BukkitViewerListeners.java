@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.klyx.exo.Exo;
 import org.klyx.exo.entity.ExoEntity;
 import org.klyx.exo.util.packet.impl.Packets;
-import xyz.bitsquidd.bits.log.Logger;
 
 import java.util.Objects;
 
@@ -28,7 +27,7 @@ public class BukkitViewerListeners implements Listener {
             Connection connection = (Connection) Packets.INSTANCE.getConnectionField().get(event.getConnection());
             Packets.INSTANCE.registerConnection(Objects.requireNonNull(event.getConnection().getProfile().getId()), connection);
         } catch (Exception e) {
-            Logger.warn("Failed to set up interceptor for player " + event.getConnection().getProfile().getName());
+            Exo.logger().warn("Failed to set up interceptor for player {}", event.getConnection().getProfile().getName());
         }
     }
 
@@ -37,7 +36,7 @@ public class BukkitViewerListeners implements Listener {
         try {
             Packets.INSTANCE.unregisterPlayer(event.getPlayerUniqueId(), true);
         } catch (Exception e) {
-            Logger.warn("Failed to remove interceptor for player " + event.getPlayerName());
+            Exo.logger().warn("Failed to remove interceptor for player {}", event.getPlayerName());
         }
     }
 
