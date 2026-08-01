@@ -3,7 +3,7 @@ package org.klyx.exo.util.packet;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBundlePacket;
-import xyz.bitsquidd.bits.log.Logger;
+import org.klyx.exo.Exo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,9 +52,7 @@ public class PacketHelper {
                 try {
                     flatList.add((Packet<? super ClientGamePacketListener>) packet);
                 } catch (ClassCastException e) {
-                    Logger.warn("Tried to bundle a packet of type " +
-                            packet.getClass().getName() +
-                            " which is not a ClientGamePacketListener packet. Skipping.");
+                    Exo.logger().warn("Tried to bundle a packet of type {} which is not a ClientGamePacketListener packet. Skipping.", packet.getClass().getName());
                 }
             }
         }

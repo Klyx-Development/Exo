@@ -5,20 +5,23 @@ import org.jspecify.annotations.Nullable;
 import org.klyx.exo.entity.EntityManager;
 import org.klyx.exo.entity.viewer.BukkitViewerListeners;
 import org.klyx.exo.util.packet.PacketManager;
-import org.slf4j.LoggerFactory;
-import xyz.bitsquidd.bits.Bits;
-import xyz.bitsquidd.bits.log.BasicLogger;
-import xyz.bitsquidd.bits.log.Logger;
+import org.slf4j.Logger;
 
 public class Exo {
 
     private static boolean enabled = false;
     private static @Nullable JavaPlugin plugin;
+    private static @Nullable Logger logger;
     private static final EntityManager ENTITY_MANAGER = new EntityManager();
     private static final PacketManager PACKET_MANAGER = new PacketManager();
 
     public static @Nullable JavaPlugin plugin() {
         return plugin;
+    }
+
+    public static Logger logger() {
+        if (logger == null) throw new IllegalStateException("Exo not initialized");
+        return logger;
     }
 
     public static EntityManager entityManager() {
@@ -30,10 +33,9 @@ public class Exo {
         if (enabled) throw new IllegalStateException("Exo already initialized");
 
         Exo.plugin = plugin;
+        Exo.logger = plugin.getSLF4JLogger();
         enabled = true;
         PACKET_MANAGER.register();
-        Bits.generic("Exo");
-        new BasicLogger(LoggerFactory.getLogger("Exo"), Logger.LogFlags.defaultFlags());
 
         new BukkitViewerListeners(plugin);
     }

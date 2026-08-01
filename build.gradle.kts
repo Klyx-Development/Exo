@@ -13,7 +13,6 @@ allprojects {
         mavenLocal()
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
-        maven { url = uri("https://repo.bitsquidd.xyz/repository/bit/") }
     }
 
     version = "2.0.0"

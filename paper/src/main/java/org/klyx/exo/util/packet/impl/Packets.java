@@ -23,7 +23,6 @@ import org.klyx.exo.util.packet.impl.handlers.PlayerConnectionHandler;
 import org.klyx.exo.util.packet.impl.handlers.PriorityPacketHandler;
 import org.klyx.exo.util.packet.impl.listener.PacketHandler;
 import org.klyx.exo.util.packet.impl.listener.PacketListener;
-import xyz.bitsquidd.bits.log.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -98,8 +97,8 @@ public class Packets {
 
                 if (loggingEnabled && tick % 20 == 0) {
                     if (incomingPacketsThisSecond.size() + outgoingPacketsThisSecond.size() > loggingPacketThreshold) {
-                        Logger.info("INCOMING: " + formatPacketTypeSet(incomingPacketsThisSecond));
-                        Logger.info("OUTGOING: " + formatPacketTypeSet(outgoingPacketsThisSecond));
+                        Exo.logger().info("INCOMING: " + formatPacketTypeSet(incomingPacketsThisSecond));
+                        Exo.logger().info("OUTGOING: " + formatPacketTypeSet(outgoingPacketsThisSecond));
                     }
                     incomingPacketsThisSecond.clear();
                     outgoingPacketsThisSecond.clear();
@@ -225,7 +224,7 @@ public class Packets {
                                 if (checkedClasses.contains(nestedClass)) {
                                     // If we got here there were two handlers creating each other's type, this would
                                     // cause infinite packet copies to be made, this should not happen!
-                                    Logger.warn("Skipping packet processing for " + nestedClass.getName() + " to avoid infinite loop");
+                                    Exo.logger().warn("Skipping packet processing for " + nestedClass.getName() + " to avoid infinite loop");
                                 }
 
                                 pendingClasses.add(nestedClass);
@@ -259,7 +258,7 @@ public class Packets {
                             try {
                                 output = handler.handle(connection, packet);
                             } catch (Exception e) {
-                                Logger.error("Error in packet handler", e);
+                                Exo.logger().error("Error in packet handler", e);
 
                                 if (KICK_ON_FAILURE) {
                                     // If an error occurs, kick the player on the main thread!
@@ -326,7 +325,7 @@ public class Packets {
                                 Class<?> nestedClass = nested.getClass();
                                 if (hasHandlers(nested)) {
                                     if (checkedClasses.contains(nestedClass)) {
-                                        Logger.warn("Skipping packet processing for " + nestedClass.getName() + " to avoid infinite loop");
+                                        Exo.logger().warn("Skipping packet processing for " + nestedClass.getName() + " to avoid infinite loop");
                                         continue;
                                     }
 
@@ -445,7 +444,7 @@ public class Packets {
     }
 
     public void sendPackets(UUID uuid, Packet<?>... packets) {
-        getPlayer(uuid).ifPresentOrElse(player -> sendPackets(player, packets), () -> Logger.warn("Player " + uuid + " is not online"));
+        getPlayer(uuid).ifPresentOrElse(player -> sendPackets(player, packets), () -> Exo.logger().warn("Player " + uuid + " is not online"));
     }
 
     public void sendPackets(Connection connection, Packet<?>... packets) {
