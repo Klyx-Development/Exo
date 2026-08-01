@@ -215,18 +215,32 @@ public abstract class ExoEntity {
         return viewerManager.getViewerCount();
     }
 
+    public boolean isRestrictedToExplicitViewers() {
+        return viewerManager.isRestrictedToExplicitViewers();
+    }
+
     public ExoEntity addViewer(UUID playerUUID) {
-        viewerManager.addViewer(playerUUID, false);
+        viewerManager.addExplicitViewer(playerUUID);
+        return this;
+    }
+    
+    public ExoEntity addViewer(Player player) {
+        viewerManager.addExplicitViewer(player.getUniqueId());
         return this;
     }
 
-    public ExoEntity addViewer(Player player) {
-        viewerManager.addViewer(player.getUniqueId(), false);
+    public ExoEntity addViewers(Collection<UUID> playerUUIDs) {
+        playerUUIDs.forEach(viewerManager::addExplicitViewer);
         return this;
     }
 
     public ExoEntity removeViewer(UUID playerUUID) {
-        viewerManager.removeViewer(playerUUID, false);
+        viewerManager.removeExplicitViewer(playerUUID);
+        return this;
+    }
+
+    public ExoEntity clearViewerRestriction() {
+        viewerManager.clearExplicitViewers();
         return this;
     }
 

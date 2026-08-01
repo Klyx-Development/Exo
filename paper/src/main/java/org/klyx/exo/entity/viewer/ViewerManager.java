@@ -35,6 +35,7 @@ public class ViewerManager {
     protected final Set<UUID> unloadedViewers = ConcurrentHashMap.newKeySet();
 
     private final Set<UUID> explicitViewers = ConcurrentHashMap.newKeySet();
+    private volatile boolean restrictedToExplicitViewers;
     private final List<Predicate<Player>> dynamicRules = new CopyOnWriteArrayList<>();
     private final List<EventSubscription> triggerSubscriptions = new CopyOnWriteArrayList<>();
 
@@ -42,6 +43,7 @@ public class ViewerManager {
         this.entity = entity;
         this.dynamicRules.addAll(rules);
         this.explicitViewers.addAll(initialViewers);
+        this.restrictedToExplicitViewers = !initialViewers.isEmpty();
     }
 
     public @UnmodifiableView Set<UUID> getViewers() {
@@ -63,6 +65,10 @@ public class ViewerManager {
         return Collections.unmodifiableSet(this.explicitViewers);
     }
 
+    public boolean isRestrictedToExplicitViewers() {
+        return this.restrictedToExplicitViewers;
+    }
+
     public boolean isViewer(UUID uuid) {
         return this.viewers.contains(uuid) || this.unloadedViewers.contains(uuid);
     }
@@ -71,11 +77,40 @@ public class ViewerManager {
         return this.viewers.size() + this.unloadedViewers.size();
     }
 
+    public void addExplicitViewer(UUID playerUUID) {
+        boolean becameRestricted = !this.restrictedToExplicitViewers;
+        this.restrictedToExplicitViewers = true;
+        boolean added = this.explicitViewers.add(playerUUID);
+
+        if (becameRestricted) {
+            syncViewers();
+            return;
+        }
+
+        if (!added) return;
+        Player player = Bukkit.getPlayer(playerUUID);
+        if (player != null) updateViewer(player);
+    }
+
+    public void removeExplicitViewer(UUID playerUUID) {
+        this.explicitViewers.remove(playerUUID);
+        removeViewer(playerUUID, false);
+    }
+
+    public void clearExplicitViewers() {
+        if (!this.restrictedToExplicitViewers) return;
+
+        this.explicitViewers.clear();
+        this.restrictedToExplicitViewers = false;
+        syncViewers();
+    }
+
     public void addViewer(UUID playerUUID, boolean isChunkLoad) {
         if (viewers.contains(playerUUID)) return;
 
         if (!entity.isSpawned()) {
             this.unloadedViewers.add(playerUUID);
+            return;
         }
 
         List<Packet<?>> defaultPackets = new ArrayList<>();
@@ -121,8 +156,10 @@ public class ViewerManager {
     }
 
     public void updateViewer(Player player) {
+        if (!entity.isSpawned()) return;
+
         UUID playerUUID = player.getUniqueId();
-        boolean isTracking = this.viewers.contains(playerUUID) || this.unloadedViewers.contains(playerUUID);
+        boolean isTracking = isViewer(playerUUID);
 
         if (shouldSee(player)) {
             boolean wasOffline = unloadedViewers.contains(playerUUID);
@@ -134,7 +171,11 @@ public class ViewerManager {
 
     public ViewerRule addRule(Predicate<Player> rule) {
         dynamicRules.add(rule);
-        return () -> dynamicRules.remove(rule);
+        syncViewers();
+
+        return () -> {
+            if (dynamicRules.remove(rule)) syncViewers();
+        };
     }
 
     public <T extends Event> ViewerRule addViewersUpdateTrigger(EventBus bus, Class<T> eventClass, Function<T, Collection<Player>> playerExtractor) {
@@ -160,7 +201,7 @@ public class ViewerManager {
             return false;
         }
 
-        if (!explicitViewers.isEmpty() && explicitViewers.contains(player.getUniqueId())) {
+        if (restrictedToExplicitViewers && !explicitViewers.contains(player.getUniqueId())) {
             return false;
         }
 
@@ -172,9 +213,14 @@ public class ViewerManager {
     }
 
     public void registerAll() {
+        syncViewers();
+    }
+
+    private void syncViewers() {
+        if (!entity.isSpawned()) return;
+
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!this.shouldSee(player)) continue;
-            addViewer(player.getUniqueId(), false);
+            updateViewer(player);
         }
     }
 
@@ -209,6 +255,7 @@ public class ViewerManager {
         this.triggerSubscriptions.clear();
         this.dynamicRules.clear();
         this.explicitViewers.clear();
+        this.restrictedToExplicitViewers = false;
     }
 
 }

@@ -20,7 +20,7 @@ public class ChunkUnloadPacketListener implements PacketListener<ClientboundForg
         Collection<ExoEntity> entities = Exo.entityManager().getEntitiesInChunk(packet.pos().x(), packet.pos().z());
         if (entities.isEmpty()) return packet;
 
-        entities.forEach(entity -> entity.getViewerManager().handleLoad(player));
+        entities.forEach(entity -> entity.getViewerManager().handleUnload(player));
         return packet;
     }
 }
