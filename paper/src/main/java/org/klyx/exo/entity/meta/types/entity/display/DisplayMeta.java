@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.klyx.exo.entity.meta.impl.MetaAccessor;
 import org.klyx.exo.entity.meta.types.EntityMeta;
+import org.klyx.exo.util.QuaternionHelper;
 
 public abstract class DisplayMeta extends EntityMeta {
 
@@ -114,12 +115,22 @@ public abstract class DisplayMeta extends EntityMeta {
         return this;
     }
 
+    public DisplayMeta setLeftRotation(Vector rotation) {
+        set(LEFT_ROTATION, QuaternionHelper.toQuaternion(rotation));
+        return this;
+    }
+
     public Quaternionfc getLeftRotation() {
         return get(LEFT_ROTATION);
     }
 
     public DisplayMeta setRightRotation(Quaternionfc rotation) {
         set(RIGHT_ROTATION, rotation);
+        return this;
+    }
+
+    public DisplayMeta setRightRotation(Vector rotation) {
+        set(RIGHT_ROTATION, QuaternionHelper.toQuaternion(rotation));
         return this;
     }
 
