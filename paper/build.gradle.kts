@@ -8,11 +8,15 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-// load .env file
 val envFile: File = rootProject.file(".env")
-if (envFile?.exists()!!) {
+if (envFile.exists()) {
     envFile.forEachLine { line ->
-        val (key, value) = line.split("=", limit = 2)
+        val trimmed = line.trim()
+        if (trimmed.isBlank() || trimmed.startsWith("#")) return@forEachLine
+        val parts = trimmed.split("=", limit = 2)
+        if (parts.size != 2) return@forEachLine
+        val key = parts[0].trim()
+        val value = parts[1].trim()
         if (!System.getenv().containsKey(key)) {
             System.setProperty(key, value)
         }
@@ -64,8 +68,8 @@ publishing {
             name = "klyxPrivate"
             url = uri("https://repo.klyx.org/private")
             credentials {
-                username = System.getProperty("KLYX_PRIVATE_USERNAME")
-                password = System.getProperty("KLYX_PRIVATE_PASSWORD")
+                username = System.getProperty("KLYX_PRIVATE_USERNAME") ?: System.getenv("KLYX_PRIVATE_USERNAME")
+                password = System.getProperty("KLYX_PRIVATE_PASSWORD") ?: System.getenv("KLYX_PRIVATE_PASSWORD")
             }
             authentication {
                 create<BasicAuthentication>("basic")
