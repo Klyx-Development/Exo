@@ -1,7 +1,7 @@
 ## Exo
 
 Exo is a Paper-exclusive API for spawning and working with client-sided entities using raw packets and NMS;
-Exo was heavily inspired by 3add's [PacketEntities](https://github.com/3add/PacketEntities), rather than depending on PacketEvents to function, you will need to use Paperweight Userdev to have the best experience using this library.
+Exo was heavily based on 3add's [PacketEntities](https://github.com/3add/PacketEntities), rather than depending on PacketEvents to function, you will need to use Paperweight Userdev to have the best experience using this library.
 Proper Bukkit compatability will be added in the future to ensure that you do not need to use Paperweight Userdev.
 
 ### Requirements
