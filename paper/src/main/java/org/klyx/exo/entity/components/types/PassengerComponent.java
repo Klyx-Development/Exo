@@ -50,10 +50,6 @@ public class PassengerComponent implements EntityComponent {
         }
 
         if (this.riding == -1) return;
-
-        ExoEntity vehicle = Exo.entityManager().getEntity(this.riding);
-        if (vehicle == null || !vehicle.hasComponent(PassengerComponent.class)) return;
-
         this.entity.sendPacketsToViewers(createPassengerPacket(this.riding, List.of(this.entity.entityId())));
     }
 
@@ -67,15 +63,21 @@ public class PassengerComponent implements EntityComponent {
         }
 
         if (this.riding == -1) return;
-
-        ExoEntity vehicle = Exo.entityManager().getEntity(this.riding);
-        if (vehicle == null || !vehicle.hasComponent(PassengerComponent.class)) return;
-
         Packets.INSTANCE.sendPacket(event.viewer(), createPassengerPacket(this.riding, List.of(this.entity.entityId())));
     }
 
     private void handleDespawn(EntityDespawnEvent event) {
+        stopRiding();
+        for (int passengerId : passengers) {
+            ExoEntity passenger = Exo.entityManager().getEntity(passengerId);
+            if (passenger != null) {
+                passenger.editComponent(PassengerComponent.class, PassengerComponent::stopRiding);
+            }
+        }
 
+        passengers.clear();
+        preRidingLocation = null;
+        riding = -1;
     }
 
     public int getRiding() {
