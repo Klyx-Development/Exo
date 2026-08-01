@@ -15,7 +15,7 @@ allprojects {
         maven("https://repo.papermc.io/repository/maven-public/")
     }
 
-    version = "2.0.1"
+    version = "2.0.2"
 }
 
 group = "org.klyx.exo"

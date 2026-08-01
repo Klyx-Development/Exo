@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.klyx.exo:exo:2.0.1")
+    compileOnly("org.klyx.exo:exo:2.0.2")
 }
 ```
 
