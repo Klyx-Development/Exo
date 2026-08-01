@@ -2,6 +2,8 @@ package org.klyx.exo.entity.meta.types.entity.display;
 
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Display;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Range;
 import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 import org.joml.Vector3f;
@@ -42,30 +44,30 @@ public abstract class DisplayMeta extends EntityMeta {
     private static final MetaAccessor<Integer> GLOW_COLOR_OVERRIDE =
             new MetaAccessor<>(22, EntityDataSerializers.INT, -1);
 
-    public DisplayMeta setTransformationInterpolationStartDeltaTicks(int ticks) {
+    public DisplayMeta setInterpolationDelay(int ticks) {
         set(TRANSFORMATION_INTERPOLATION_START_DELTA_TICKS, ticks);
         return this;
     }
 
-    public int getTransformationInterpolationStartDeltaTicks() {
+    public int getInterpolationDelay() {
         return get(TRANSFORMATION_INTERPOLATION_START_DELTA_TICKS);
     }
 
-    public DisplayMeta setTransformationInterpolationDuration(int ticks) {
+    public DisplayMeta setInterpolationDuration(int ticks) {
         set(TRANSFORMATION_INTERPOLATION_DURATION, ticks);
         return this;
     }
 
-    public int getTransformationInterpolationDuration() {
+    public int getInterpolationDuration() {
         return get(TRANSFORMATION_INTERPOLATION_DURATION);
     }
 
-    public DisplayMeta setPosRotInterpolationDuration(int ticks) {
+    public DisplayMeta setTeleportDuration(int ticks) {
         set(POS_ROT_INTERPOLATION_DURATION, ticks);
         return this;
     }
 
-    public int getPosRotInterpolationDuration() {
+    public int getTeleportDuration() {
         return get(POS_ROT_INTERPOLATION_DURATION);
     }
 
@@ -74,8 +76,18 @@ public abstract class DisplayMeta extends EntityMeta {
         return this;
     }
 
+    public DisplayMeta setTranslation(Vector translation) {
+        set(TRANSLATION, translation.toVector3f());
+        return this;
+    }
+
     public Vector3fc getTranslation() {
         return get(TRANSLATION);
+    }
+
+    public Vector getTranslationBukkit() {
+        Vector3fc translation = getTranslation();
+        return new Vector(translation.x(), translation.y(), translation.z());
     }
 
     public DisplayMeta setScale(Vector3fc scale) {
@@ -83,8 +95,18 @@ public abstract class DisplayMeta extends EntityMeta {
         return this;
     }
 
+    public DisplayMeta setScale(Vector scale) {
+        set(SCALE, scale.toVector3f());
+        return this;
+    }
+
     public Vector3fc getScale() {
         return get(SCALE);
+    }
+
+    public Vector getScaleBukkit() {
+        Vector3fc scale = getScale();
+        return new Vector(scale.x(), scale.y(), scale.z());
     }
 
     public DisplayMeta setLeftRotation(Quaternionfc rotation) {
@@ -114,12 +136,12 @@ public abstract class DisplayMeta extends EntityMeta {
         return get(BILLBOARD_CONSTRAINTS);
     }
 
-    public DisplayMeta setBrightnessOverride(int blockLight, int skyLight) {
+    public DisplayMeta setBrightnessOverride(@Range(from = 0, to = 15) int blockLight, @Range(from = 0, to = 15) int skyLight) {
         set(BRIGHTNESS_OVERRIDE, (blockLight << 4 | skyLight << 20));
         return this;
     }
 
-    public DisplayMeta setBrightnessOverride(int brightness) {
+    public DisplayMeta setBrightnessOverride(@Range(from = 0, to = 15) int brightness) {
         return setBrightnessOverride(brightness, brightness);
     }
 
