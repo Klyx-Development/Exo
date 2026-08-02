@@ -45,7 +45,7 @@ import java.util.stream.StreamSupport;
 
 public class Packets {
 
-    public static final Packets INSTANCE = new Packets("klyx_packets");
+    public static final Packets INSTANCE = new Packets("exo_packets");
 
     private final String key;
 
