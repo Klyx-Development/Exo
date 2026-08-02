@@ -13,7 +13,6 @@ import org.klyx.exo.entity.components.EntityComponent;
 import org.klyx.exo.entity.events.EntityDespawnEvent;
 import org.klyx.exo.entity.events.EntitySpawnEvent;
 import org.klyx.exo.entity.events.ViewerShowEntityEvent;
-import org.klyx.exo.util.packet.impl.Packets;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
@@ -59,11 +58,12 @@ public class PassengerComponent implements EntityComponent {
         if (!this.passengers.isEmpty()) {
             ClientboundSetPassengersPacket packet = this.createPassengerPacket(entity.entityId(), passengers);
             if (packet == null) return;
-            Packets.INSTANCE.sendPacket(event.viewer(), packet);
+
+            event.addPacketLast(packet);
         }
 
         if (this.riding == -1) return;
-        Packets.INSTANCE.sendPacket(event.viewer(), createPassengerPacket(this.riding, List.of(this.entity.entityId())));
+        event.addPacketLast(createPassengerPacket(this.riding, List.of(this.entity.entityId())));
     }
 
     private void handleDespawn(EntityDespawnEvent event) {
