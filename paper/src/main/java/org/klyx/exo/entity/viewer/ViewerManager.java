@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.Nullable;
+import org.klyx.exo.Exo;
 import org.klyx.exo.entity.ExoEntity;
 import org.klyx.exo.entity.events.ViewerHideEntityEvent;
 import org.klyx.exo.entity.events.ViewerShowEntityEvent;
@@ -206,7 +207,12 @@ public class ViewerManager {
         }
 
         for (Predicate<Player> rule : dynamicRules) {
-            if (!rule.test(player)) return false;
+            try {
+                if (!rule.test(player)) return false;
+            } catch (Exception e) {
+                Exo.logger().error("An error occurred while evaluating a viewer rule for {}: ", player.getName(), e);
+                return false;
+            }
         }
 
         return true;
