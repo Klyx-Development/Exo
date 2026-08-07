@@ -254,4 +254,13 @@ public class EntityWorldStateManager {
         );
     }
 
+    /**
+     * Used for manually updating the entity's world state
+     * This is for situations where you don't necessarily want to teleport the entity,
+     * but you want to update it's next position when it's next loaded, etc.
+     */
+    public void updateState(EntityWorldState state) {
+        this.worldState = state;
+    }
+
 }
