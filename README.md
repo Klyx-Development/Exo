@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.klyx.exo:exo:2.0.5")
+    compileOnly("org.klyx.exo:exo:2.0.6")
 }
 ```
 
@@ -52,7 +52,7 @@ dependencies {
 <dependency>
     <groupId>org.klyx.exo</groupId>
     <artifactId>exo</artifactId>
-    <version>2.0.5</version>
+    <version>2.0.6</version>
 </dependency>
 ```
 
