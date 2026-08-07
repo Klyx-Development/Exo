@@ -172,6 +172,14 @@ public abstract class ExoEntity {
         return entityData().getObjectDataValue();
     }
 
+    public @Nullable Consumer<ExoEntity> getOnShow() {
+        return entityData().getOnShow();
+    }
+
+    public @Nullable Consumer<ExoEntity> getOnHide() {
+        return entityData().getOnHide();
+    }
+
     public ExoEntity setAttribute(Holder<Attribute> attribute, double value) {
         attributesStateManager.setAttribute(attribute, value);
         return this;

@@ -120,6 +120,7 @@ public class ViewerManager {
 
         ViewerShowEntityEvent event = new ViewerShowEntityEvent(defaultPackets, playerUUID, isChunkLoad);
         this.entity.eventBus().post(event);
+        if (entity.getOnShow() != null) entity.getOnShow().accept(entity);
 
         this.unloadedViewers.remove(playerUUID);
         if (event.isCancelled()) {
@@ -146,6 +147,7 @@ public class ViewerManager {
 
         ViewerHideEntityEvent event = new ViewerHideEntityEvent(defaultPackets, playerUuid, isChunkUnload);
         this.entity.eventBus().post(event);
+        if (entity.getOnHide() != null) entity.getOnHide().accept(entity);
         if (event.isCancelled()) return;
         this.viewers.remove(playerUuid);
 

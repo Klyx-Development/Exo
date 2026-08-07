@@ -2,6 +2,7 @@ package org.klyx.exo.entity.data;
 
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.Nullable;
+import org.klyx.exo.entity.ExoEntity;
 import org.klyx.exo.entity.components.EntityComponent;
 import org.klyx.exo.entity.data.object.AbstractObjectData;
 import org.klyx.exo.entity.meta.impl.AbstractEntityMeta;
@@ -18,12 +19,16 @@ public class EntityData {
     private final List<EntityComponent> components;
     private final @Nullable AbstractEntityMeta meta;
     private final @Nullable AbstractObjectData objectData;
+    private final @Nullable Consumer<ExoEntity> onShow;
+    private final @Nullable Consumer<ExoEntity> onHide;
 
     private EntityData(Builder builder) {
         this.type = builder.type;
         this.components = List.copyOf(builder.components);
         this.meta = builder.resolveMeta();
         this.objectData = validateObjectData(builder.objectData, type);
+        this.onShow = builder.onShow;
+        this.onHide = builder.onHide;
     }
 
     public static EntityData.Builder builder() {
@@ -71,12 +76,22 @@ public class EntityData {
         return objectData != null ? objectData.value() : 0;
     }
 
+    public @Nullable Consumer<ExoEntity> getOnHide() {
+        return onHide;
+    }
+
+    public @Nullable Consumer<ExoEntity> getOnShow() {
+        return onShow;
+    }
+
     public static final class Builder implements Buildable<EntityData> {
 
         private EntityType type;
         private List<EntityComponent> components = new ArrayList<>();
         private final List<MetaOp<?>> metaOps = new ArrayList<>();
         private @Nullable AbstractObjectData objectData;
+        private @Nullable Consumer<ExoEntity> onShow;
+        private @Nullable Consumer<ExoEntity> onHide;
 
         private record MetaOp<M extends AbstractEntityMeta>(Class<M> metaClass, Consumer<M> consumer) {}
 
@@ -97,6 +112,16 @@ public class EntityData {
 
         public Builder components(List<EntityComponent> components) {
             this.components = components;
+            return this;
+        }
+
+        public Builder onShow(Consumer<ExoEntity> onShow) {
+            this.onShow = onShow;
+            return this;
+        }
+
+        public Builder onHide(Consumer<ExoEntity> onHide) {
+            this.onHide = onHide;
             return this;
         }
 
