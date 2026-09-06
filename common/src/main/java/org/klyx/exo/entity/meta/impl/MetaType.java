@@ -1,0 +1,24 @@
+package org.klyx.exo.entity.meta.impl;
+
+public enum MetaType {
+    BYTE,
+    INT,
+    FLOAT,
+    BOOLEAN,
+    COMPONENT,
+    OPTIONAL_COMPONENT,
+    ITEM_STACK,
+    POSE,
+    BLOCK_POS,
+    OPTIONAL_BLOCK_POS,
+    DIRECTION,
+    ROTATIONS,
+    QUATERNION,
+    VECTOR3,
+    BLOCK_STATE,
+    PARTICLE,
+    PARTICLES,
+    HUMANOID_ARM,
+    RESOLVABLE_PROFILE,
+    OPTIONAL_UNSIGNED_INT
+}

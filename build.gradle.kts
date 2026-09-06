@@ -1,22 +1,30 @@
-plugins {
-    alias(libs.plugins.paperweight.userdev)
+val envFile: File = rootProject.file(".env")
+if (envFile.exists()) {
+    envFile.forEachLine { line ->
+        val trimmed = line.trim()
+        if (trimmed.isBlank() || trimmed.startsWith("#")) return@forEachLine
+
+        val parts = trimmed.split("=", limit = 2)
+        if (parts.size != 2) return@forEachLine
+
+        val key = parts[0].trim()
+        val value = parts[1].trim()
+
+        if (!System.getenv().containsKey(key)) {
+            System.setProperty(key, value)
+        }
+    }
 }
 
 allprojects {
-    plugins.apply(rootProject.libs.plugins.paperweight.userdev.get().pluginId)
-
-    dependencies {
-        paperweight.paperDevBundle(rootProject.libs.versions.paper.api.get())
-    }
+    group = "org.klyx.exo"
+    version = "3.0.0"
 
     repositories {
         mavenLocal()
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
     }
-
-    version = "2.0.7"
 }
 
-group = "org.klyx.exo"
 description = "Klyx's packet entity API"

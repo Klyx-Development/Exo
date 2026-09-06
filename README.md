@@ -1,33 +1,53 @@
 ## Exo
 
-Exo is a Paper-exclusive API for spawning and working with client-sided entities using raw packets and NMS;
-Exo was heavily based on 3add's [PacketEntities](https://github.com/3add/PacketEntities), rather than depending on PacketEvents to function, you will need to use Paperweight Userdev to have the best experience using this library.
-Proper Bukkit compatability will be added in the future to ensure that you do not need to use Paperweight Userdev.
+Exo is a platform-agnostic API for spawning and working with client-sided entities using raw packets.
+Exo is heavily based on 3add's [PacketEntities](https://github.com/3add/PacketEntities)
+
+The library is split into a `common` module, which contains the entity/component API, and platform modules that implement that logic for a specific server software:
+
+- **Paper** (`platform-paper`) - Note that this requires you to use Paperweight Userdev for the best experience. Proper Bukkit compatibility (without Paperweight Userdev) will be added in the future.
+- **Minestom** (`platform-minestom`)
 
 ### Requirements
 - Java 25+
-- Paperweight Userdev
-- Paper 1.21.11-26.2
-# Installation
+- One of the supported platforms:
+  - Paper 1.21.11-26.2 (with Paperweight Userdev)
+  - Minestom
+
+## Installation
 
 ## Setup
 
-In your plugin's onEnable() method, you will need to call Exo#init(JavaPlugin) to initialize the library, and you can optionally call the destroy method in your onDisable() method. 
+### Paper
+
+In your plugin's `onEnable()` method, call `ExoPaper#init(JavaPlugin)` to initialize the library, and call `ExoPaper#destroy()` in `onDisable()`.
 
 ```java
 import org.bukkit.plugin.java.JavaPlugin;
-import org.klyx.exo.Exo;
+import org.klyx.exo.paper.ExoPaper;
 
 public class MyPlugin extends JavaPlugin {
 
     public void onEnable() {
-        Exo.init(this);
+        ExoPaper.init(this);
     }
-    
+
     public void onDisable() {
-        Exo.destroy();
+        ExoPaper.destroy();
     }
 }
+```
+
+### Minestom
+
+Call `ExoMinestom#init()` after `MinecraftServer.init()`, and call `ExoMinestom#destroy()` when your server shuts down.
+
+```java
+import net.minestom.server.MinecraftServer;
+import org.klyx.exo.minestom.ExoMinestom;
+
+MinecraftServer server = MinecraftServer.init();
+ExoMinestom.init();
 ```
 
 ## Gradle (Kotlin DSL)
@@ -38,7 +58,14 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.klyx.exo:exo:2.0.7")
+    // Common (required)
+    implementation("org.klyx.exo:exo-common:3.0.0")
+    
+    // Paper
+    implementation("org.klyx.exo:exo-paper:3.0.0")
+
+    // Minestom
+    implementation("org.klyx.exo:exo-minestom:3.0.0")
 }
 ```
 
@@ -49,32 +76,40 @@ dependencies {
     <url>https://repo.klyx.org/releases</url>
 </repository>
 
+<!-- Paper -->
 <dependency>
     <groupId>org.klyx.exo</groupId>
     <artifactId>exo</artifactId>
-    <version>2.0.7</version>
+    <version>3.0.0</version>
+</dependency>
+
+<!-- Minestom -->
+<dependency>
+    <groupId>org.klyx.exo</groupId>
+    <artifactId>exo-minestom</artifactId>
+    <version>3.0.0</version>
 </dependency>
 ```
-
 
 ## Usage
 
 Every packet entity is defined by extending `ExoEntity` and implementing `define()`, which describes the entity's data.
-Examples can be found in the `plugin` package.
 
-### A simple mannequin 
+Examples for each platform can be found in the `demo` module (`demo/paper`, `demo/minestom`).
+
+### A simple mannequin (Paper)
 
 ```java
 public class TestMannequin extends ExoEntity {
- 
+
     @Override
     public EntityData.Builder define() {
         return EntityData.builder()
-                .entityType(EntityType.MANNEQUIN)
+                .entityType(PaperEntityTypes.toExo(EntityType.MANNEQUIN))
                 .components(
                         new LookAtComponent(),
                         new AttackComponent(event ->
-                                event.attacker().sendMessage(Component.text("How could you?")))
+                                ((ExoPaperPlayer) event.attacker()).bukkit().sendMessage(Component.text("How could you?")))
                 )
                 .meta(MannequinMeta.class, meta -> {
                     meta.setImmovable(true);
@@ -83,15 +118,15 @@ public class TestMannequin extends ExoEntity {
 }
 ```
 
-### A glowing baby zombie with a passenger
+### A glowing baby zombie with a passenger (Paper)
 
 ```java
 public class TestZombie extends ExoEntity {
- 
+
     @Override
     public EntityData.@NonNull Builder define() {
         return EntityData.builder()
-                .entityType(EntityType.ZOMBIE)
+                .entityType(PaperEntityTypes.toExo(EntityType.ZOMBIE))
                 .components(new TickComponent(), new PassengerComponent())
                 .meta(ZombieMeta.class, meta -> {
                     meta.setGlowing(true);
@@ -101,3 +136,14 @@ public class TestZombie extends ExoEntity {
 }
 ```
 
+Spawning and interacting with an entity works the same way on every platform, however, you will need to use your platform's respective conversion utilities to actually spawn and interact with these entities.
+Example from the Paper demo:
+
+```java
+ExoWorld world = PaperLocUtil.toExoWorld(player.getLocation().getWorld());
+ExoPos pos = PaperLocUtil.toExoPos(player.getLocation());
+
+TestMannequin mannequin = new TestMannequin();
+mannequin.spawn(world, pos);
+mannequin.addViewer(ExoPaperPlayer.of(player));
+```

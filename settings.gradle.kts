@@ -11,5 +11,12 @@ plugins {
 
 rootProject.name = "Exo"
 
-include(":paper")
-include(":plugin")
+include(":common")
+include(":platform-paper")
+project(":platform-paper").projectDir = file("platform/paper")
+include(":platform-minestom")
+project(":platform-minestom").projectDir = file("platform/minestom")
+include(":demo-paper")
+project(":demo-paper").projectDir = file("demo/paper")
+include(":demo-minestom")
+project(":demo-minestom").projectDir = file("demo/minestom")

@@ -1,13 +1,30 @@
 [versions]
 paper-api = "26.2.build.+"
-shadow = "8.3.0"
+shadow = "9.6.1"
 run-paper = "3.0.2"
 paperweight-userdev = "2.0.0-beta.21"
 bits = "0.0.22"
+minestom = "2026.08.28-26.2"
+jetbrains-annotations = "26.0.2"
+fastutil = "8.5.19"
+guava = "33.6.0-jre"
+adventure = "4.26.1"
+adventure-nbt = "5.2.0"
+joml = "1.10.8"
+slf4j = "2.0.18"
 
 [libraries]
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
 bits-api = { group = "xyz.bitsquidd.bits" , name = "api", version.ref = "bits" }
+minestom = { module = "net.minestom:minestom", version.ref = "minestom" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+fastutil = { module = "it.unimi.dsi:fastutil", version.ref = "fastutil" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventure-nbt = { module = "net.kyori:adventure-nbt", version.ref = "adventure-nbt" }
+joml = { module = "org.joml:joml", version.ref = "joml" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 
 [plugins]
 run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
