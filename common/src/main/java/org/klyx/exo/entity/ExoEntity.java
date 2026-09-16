@@ -44,6 +44,7 @@ public abstract class ExoEntity {
 
     private final int entityId;
     private final UUID uuid;
+    private final boolean tracked;
 
     private volatile @Nullable EntityData entityData;
     private boolean resolvingEntityData;
@@ -51,14 +52,21 @@ public abstract class ExoEntity {
     private volatile boolean isSpawned;
 
     protected ExoEntity() {
+        this(true);
+    }
+
+    protected ExoEntity(boolean tracked) {
         this.entityComponentManager = new EntityComponentManager();
         this.viewerManager = new ViewerManager(this, new ArrayList<>(), new ArrayList<>());
         this.attributesStateManager = new AttributeStateManager(this, List.of());
 
         this.entityId = EntityId.next();
         this.uuid = UUID.randomUUID();
+        this.tracked = tracked;
 
-        Exo.entityManager().addEntity(this);
+        if (tracked) {
+            Exo.entityManager().addEntity(this);
+        }
     }
 
     public abstract EntityData.Builder define();
@@ -110,6 +118,10 @@ public abstract class ExoEntity {
 
     public boolean isSpawned() {
         return isSpawned;
+    }
+
+    public boolean isTracked() {
+        return tracked;
     }
 
     public <C extends EntityComponent> @Nullable C getComponent(Class<C> componentClass) {
@@ -356,7 +368,9 @@ public abstract class ExoEntity {
         }
 
         isSpawned = true;
-        Exo.entityManager().trackWorldPosition(this);
+        if (tracked) {
+            Exo.entityManager().trackWorldPosition(this);
+        }
 
         viewerManager.registerAll();
         worldStateManager.markSynced();
@@ -383,7 +397,9 @@ public abstract class ExoEntity {
         entityComponentManager.eventBus().post(event);
         if (event.isCancelled()) return this;
 
-        Exo.entityManager().untrackWorldPosition(this);
+        if (tracked) {
+            Exo.entityManager().untrackWorldPosition(this);
+        }
 
         isSpawned = false;
         viewerManager.unregisterAll();
@@ -395,6 +411,8 @@ public abstract class ExoEntity {
         entityComponentManager.detachAll(this);
         viewerManager.destroy();
         entityComponentManager.destroy();
-        Exo.entityManager().removeEntity(this);
+        if (tracked) {
+            Exo.entityManager().removeEntity(this);
+        }
     }
 }

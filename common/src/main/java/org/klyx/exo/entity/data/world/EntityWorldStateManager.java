@@ -88,7 +88,9 @@ public class EntityWorldStateManager {
         }
 
         ExoVec3d pos = this.worldState.currentPos();
-        Exo.entityManager().updateEntityWorld(this.entity, oldWorld, pos, newWorld, pos);
+        if (this.entity.isTracked()) {
+            Exo.entityManager().updateEntityWorld(this.entity, oldWorld, pos, newWorld, pos);
+        }
         this.worldState = this.worldState.withWorld(newWorld);
 
         if (!wasSpawned) return;
@@ -130,7 +132,7 @@ public class EntityWorldStateManager {
         int newChunkX = (int) Math.floor(newPos.x()) >> 4;
         int newChunkZ = (int) Math.floor(newPos.z()) >> 4;
 
-        if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
+        if ((oldChunkX != newChunkX || oldChunkZ != newChunkZ) && this.entity.isTracked()) {
             Exo.entityManager().updateEntityChunk(this.entity, oldPos, newPos);
         }
 
