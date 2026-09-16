@@ -59,13 +59,13 @@ repositories {
 
 dependencies {
     // Common (required)
-    implementation("org.klyx.exo:exo-common:3.0.0")
+    implementation("org.klyx.exo:exo-common:3.0.1")
     
     // Paper
-    implementation("org.klyx.exo:exo-paper:3.0.0")
+    implementation("org.klyx.exo:exo-paper:3.0.1")
 
     // Minestom
-    implementation("org.klyx.exo:exo-minestom:3.0.0")
+    implementation("org.klyx.exo:exo-minestom:3.0.1")
 }
 ```
 
@@ -76,18 +76,25 @@ dependencies {
     <url>https://repo.klyx.org/releases</url>
 </repository>
 
+<!-- Common (Required) -->
+<dependency>
+  <groupId>org.klyx.exo</groupId>
+  <artifactId>exo-common</artifactId>
+  <version>3.0.1</version>
+</dependency>
+
 <!-- Paper -->
 <dependency>
     <groupId>org.klyx.exo</groupId>
-    <artifactId>exo</artifactId>
-    <version>3.0.0</version>
+    <artifactId>exo-paper</artifactId>
+    <version>3.0.1</version>
 </dependency>
 
 <!-- Minestom -->
 <dependency>
     <groupId>org.klyx.exo</groupId>
     <artifactId>exo-minestom</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 </dependency>
 ```
 
