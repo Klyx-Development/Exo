@@ -89,17 +89,34 @@ public final class PaperNbt {
     }
 
     private static ListBinaryTag toBinaryList(ListTag tag) {
+        byte elementType = tag.identifyRawElementType();
+
         ListBinaryTag.Builder<BinaryTag> builder = ListBinaryTag.builder();
         for (Tag entry : tag) {
-            builder.add(toBinaryTag(entry));
+            builder.add(toBinaryTag(wrapIfNeeded(elementType, entry)));
         }
         return builder.build();
+    }
+
+    private static final byte TAG_COMPOUND_ID = 10;
+
+    private static Tag wrapIfNeeded(byte elementType, Tag tag) {
+        if (elementType != TAG_COMPOUND_ID) return tag;
+        if (tag instanceof CompoundTag compound && !isWrapper(compound)) return compound;
+
+        CompoundTag wrapper = new CompoundTag();
+        wrapper.put("", tag);
+        return wrapper;
+    }
+
+    private static boolean isWrapper(CompoundTag tag) {
+        return tag.size() == 1 && tag.contains("");
     }
 
     private static ListTag toNmsList(ListBinaryTag tag) {
         ListTag list = new ListTag();
         for (BinaryTag entry : tag) {
-            list.add(toNmsTag(entry));
+            list.addAndUnwrap(toNmsTag(entry));
         }
         return list;
     }
