@@ -1,6 +1,6 @@
 package org.klyx.exo.entity.meta.types.entity.living.mob.creatures;
 
-import org.klyx.exo.entity.meta.types.entity.living.mob.MobMeta;
+import org.klyx.exo.entity.meta.types.entity.living.mob.PathfinderMobMeta;
 
-public abstract class CreatureMeta extends MobMeta {
+public class CreatureMeta extends PathfinderMobMeta {
 }

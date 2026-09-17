@@ -4,7 +4,7 @@ import org.klyx.exo.entity.meta.impl.MetaAccessor;
 import org.klyx.exo.entity.meta.impl.MetaType;
 import org.klyx.exo.entity.meta.types.EntityMeta;
 
-public abstract class AbstractArrowMeta extends EntityMeta {
+public class AbstractArrowMeta extends EntityMeta {
 
     private static final MetaAccessor<Byte> ARROW_FLAGS = new MetaAccessor<>(8, MetaType.BYTE, (byte) 0);
     private static final MetaAccessor<Byte> PIERCING_LEVEL = new MetaAccessor<>(9, MetaType.BYTE, (byte) 0);
