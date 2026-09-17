@@ -2,6 +2,8 @@ package org.klyx.exo.paper.entity.viewer;
 
 import net.minecraft.network.protocol.game.ServerboundAttackPacket;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
 import org.klyx.exo.Exo;
@@ -34,8 +36,13 @@ public class AttackPacketListener implements PacketListener<ServerboundAttackPac
         ExoEntity target = Exo.entityManager().getEntity(targetId);
         if (target == null) return packet;
 
-        target.eventBus().post(new EntityAttackEvent(ExoPaperPlayer.of(player)));
+        target.eventBus().post(new EntityAttackEvent(ExoPaperPlayer.of(player), resolveAttackDamage(player)));
         return null;
+    }
+
+    private static float resolveAttackDamage(Player player) {
+        AttributeInstance attribute = player.getAttribute(Attribute.ATTACK_DAMAGE);
+        return attribute != null ? (float) attribute.getValue() : 1.0F;
     }
 
     private static boolean hasAttackPacket() {
@@ -66,7 +73,7 @@ public class AttackPacketListener implements PacketListener<ServerboundAttackPac
                             ExoEntity target = Exo.entityManager().getEntity(targetId);
                             if (target == null) return List.of(packet);
 
-                            target.eventBus().post(new EntityAttackEvent(ExoPaperPlayer.of(player)));
+                            target.eventBus().post(new EntityAttackEvent(ExoPaperPlayer.of(player), resolveAttackDamage(player)));
                             return Collections.emptyList();
                         } catch (ReflectiveOperationException e) {
                             throw new RuntimeException(e);

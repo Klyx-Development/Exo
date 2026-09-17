@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.klyx.exo.entity.ExoPos;
-import org.klyx.exo.paper.entity.components.types.PassengerComponent;
 import org.klyx.exo.entity.meta.types.entity.living.avatar.MannequinMeta;
 import org.klyx.exo.entity.meta.types.entity.living.mob.creatures.ZombieMeta;
 import org.klyx.exo.paper.ExoPaper;
+import org.klyx.exo.paper.entity.components.types.PassengerComponent;
 import org.klyx.exo.paper.meta.PaperProfiles;
 import org.klyx.exo.paper.player.ExoPaperPlayer;
 import org.klyx.exo.paper.util.PaperLocUtil;
@@ -36,8 +36,8 @@ public class ExoTest extends JavaPlugin {
                                     ExoPos pos = PaperLocUtil.toExoPos(loc);
 
                                     TestZombie zombie = new TestZombie();
-                                    zombie.spawn(world, pos);
                                     zombie.addViewer(ctx.getSource().getExecutor().getUniqueId());
+                                    zombie.spawn(world, pos);
 
                                     if (!(ctx.getSource().getExecutor() instanceof Player player)) return Command.SINGLE_SUCCESS;
                                     zombie.getComponent(PassengerComponent.class).startRiding(player.getEntityId());
@@ -58,12 +58,25 @@ public class ExoTest extends JavaPlugin {
                                     ExoWorld world = PaperLocUtil.toExoWorld(player.getLocation().getWorld());
                                     ExoPos pos = PaperLocUtil.toExoPos(player.getLocation());
 
+                                    mannequin.addViewer(ExoPaperPlayer.of(player));
                                     mannequin.spawn(world, pos);
                                     mannequin.editMeta(MannequinMeta.class, meta -> meta.setProfile(PaperProfiles.fromBukkit(player)));
-                                    mannequin.addViewer(ExoPaperPlayer.of(player));
 
                                     return Command.SINGLE_SUCCESS;
                                 }))
+                            .then(Commands.literal("hurtTest")
+                                    .executes(ctx -> {
+                                        if (!(ctx.getSource().getExecutor() instanceof Player player)) return Command.SINGLE_SUCCESS;
+
+                                        TestHealthEntity husk = new TestHealthEntity();
+                                        ExoWorld world = PaperLocUtil.toExoWorld(player.getLocation().getWorld());
+                                        ExoPos pos = PaperLocUtil.toExoPos(player.getLocation());
+
+                                        husk.addViewer(ExoPaperPlayer.of(player));
+                                        husk.spawn(world, pos);
+
+                                        return Command.SINGLE_SUCCESS;
+                                    }))
                             .build()
             );
         });
