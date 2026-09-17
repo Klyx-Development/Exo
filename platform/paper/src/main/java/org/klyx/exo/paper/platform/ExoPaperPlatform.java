@@ -6,6 +6,7 @@ import org.klyx.exo.common.AttributeDispatcher;
 import org.klyx.exo.common.EquipmentDispatcher;
 import org.klyx.exo.common.ExoPlatform;
 import org.klyx.exo.common.LeashDispatcher;
+import org.klyx.exo.common.LightweightEntityDispatcher;
 import org.klyx.exo.common.MetadataDispatcher;
 import org.klyx.exo.common.MovementDispatcher;
 import org.klyx.exo.common.PassengerDispatcher;
@@ -17,6 +18,7 @@ import org.klyx.exo.entity.dispatch.PacketDispatcher;
 import org.klyx.exo.paper.dispatch.PaperAttributeDispatcher;
 import org.klyx.exo.paper.dispatch.PaperEquipmentDispatcher;
 import org.klyx.exo.paper.dispatch.PaperLeashDispatcher;
+import org.klyx.exo.paper.dispatch.PaperLightweightEntityDispatcher;
 import org.klyx.exo.paper.dispatch.PaperMetadataDispatcher;
 import org.klyx.exo.paper.dispatch.PaperMovementDispatcher;
 import org.klyx.exo.paper.dispatch.PaperPacketSender;
@@ -42,6 +44,7 @@ public final class ExoPaperPlatform implements ExoPlatform {
     private final PaperLeashDispatcher leashDispatcher;
     private final PaperPassengerDispatcher passengerDispatcher;
     private final PaperSpectateDispatcher spectateDispatcher;
+    private final PaperLightweightEntityDispatcher lightweightEntityDispatcher = new PaperLightweightEntityDispatcher();
 
     public ExoPaperPlatform(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -123,5 +126,10 @@ public final class ExoPaperPlatform implements ExoPlatform {
     @Override
     public SpectateDispatcher spectateDispatcher() {
         return spectateDispatcher;
+    }
+
+    @Override
+    public LightweightEntityDispatcher lightweightEntityDispatcher() {
+        return lightweightEntityDispatcher;
     }
 }

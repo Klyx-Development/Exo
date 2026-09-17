@@ -7,6 +7,7 @@ import org.klyx.exo.entity.dispatch.PacketDispatcher;
 import org.klyx.exo.minestom.dispatch.MinestomAttributeDispatcher;
 import org.klyx.exo.minestom.dispatch.MinestomEquipmentDispatcher;
 import org.klyx.exo.minestom.dispatch.MinestomLeashDispatcher;
+import org.klyx.exo.minestom.dispatch.MinestomLightweightEntityDispatcher;
 import org.klyx.exo.minestom.dispatch.MinestomMetadataDispatcher;
 import org.klyx.exo.minestom.dispatch.MinestomMovementDispatcher;
 import org.klyx.exo.minestom.dispatch.MinestomPacketSender;
@@ -19,6 +20,7 @@ import org.klyx.exo.common.AttributeDispatcher;
 import org.klyx.exo.common.EquipmentDispatcher;
 import org.klyx.exo.common.ExoPlatform;
 import org.klyx.exo.common.LeashDispatcher;
+import org.klyx.exo.common.LightweightEntityDispatcher;
 import org.klyx.exo.common.MetadataDispatcher;
 import org.klyx.exo.common.MovementDispatcher;
 import org.klyx.exo.common.PassengerDispatcher;
@@ -40,6 +42,7 @@ public final class MinestomExoPlatform implements ExoPlatform {
     private final MinestomLeashDispatcher leashDispatcher = new MinestomLeashDispatcher(packetDispatcher);
     private final MinestomPassengerDispatcher passengerDispatcher = new MinestomPassengerDispatcher(packetDispatcher);
     private final MinestomSpectateDispatcher spectateDispatcher = new MinestomSpectateDispatcher(packetDispatcher);
+    private final MinestomLightweightEntityDispatcher lightweightEntityDispatcher = new MinestomLightweightEntityDispatcher();
 
     public void start() {
         packetDispatcher.start();
@@ -102,5 +105,10 @@ public final class MinestomExoPlatform implements ExoPlatform {
     @Override
     public SpectateDispatcher spectateDispatcher() {
         return spectateDispatcher;
+    }
+
+    @Override
+    public LightweightEntityDispatcher lightweightEntityDispatcher() {
+        return lightweightEntityDispatcher;
     }
 }

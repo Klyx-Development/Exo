@@ -15,4 +15,5 @@ public interface ExoPlatform {
     LeashDispatcher leashDispatcher();
     PassengerDispatcher passengerDispatcher();
     SpectateDispatcher spectateDispatcher();
+    LightweightEntityDispatcher lightweightEntityDispatcher();
 }

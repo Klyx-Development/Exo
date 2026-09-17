@@ -18,7 +18,7 @@ if (envFile.exists()) {
 
 allprojects {
     group = "org.klyx.exo"
-    version = "3.0.1"
+    version = "3.0.3"
 
     repositories {
         mavenLocal()
