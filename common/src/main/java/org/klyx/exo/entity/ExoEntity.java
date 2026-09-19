@@ -254,6 +254,11 @@ public abstract class ExoEntity {
         return this;
     }
 
+    public ExoEntity removeViewer(ExoPlayer player) {
+        viewerManager.removeExplicitViewer(player.uuid());
+        return this;
+    }
+
     public ExoEntity clearViewerRestriction() {
         viewerManager.clearExplicitViewers();
         return this;
