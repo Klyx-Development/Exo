@@ -9,11 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public final class PacketDispatcher<P> {
 
     private final PacketSender<P> sender;
     private final TickScheduler scheduler;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "ExoPackets");
+        thread.setDaemon(true);
+        return thread;
+    });
 
     private Map<UUID, EnumMap<PacketCategory, List<P>>> pending = new HashMap<>();
     private TickScheduler.@Nullable Handle tickHandle;
@@ -26,13 +33,13 @@ public final class PacketDispatcher<P> {
     public void schedule(UUID viewer, PacketCategory category, List<P> packets) {
         if (packets.isEmpty()) return;
 
-        pending.computeIfAbsent(viewer, _ -> new EnumMap<>(PacketCategory.class))
+        executor.execute(() -> pending.computeIfAbsent(viewer, _ -> new EnumMap<>(PacketCategory.class))
                 .computeIfAbsent(category, _ -> new ArrayList<>())
-                .addAll(packets);
+                .addAll(packets));
     }
 
     public void start() {
-        if (tickHandle == null) tickHandle = scheduler.repeatEveryTick(this::drain);
+        if (tickHandle == null) tickHandle = scheduler.repeatEveryTick(() -> executor.execute(this::drain));
     }
 
     public void stop() {
@@ -40,7 +47,8 @@ public final class PacketDispatcher<P> {
             tickHandle.cancel();
             tickHandle = null;
         }
-        pending = new HashMap<>();
+        executor.execute(() -> pending = new HashMap<>());
+        executor.shutdown();
     }
 
     private void drain() {
