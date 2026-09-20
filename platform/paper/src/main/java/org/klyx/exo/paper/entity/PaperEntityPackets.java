@@ -18,7 +18,7 @@ public final class PaperEntityPackets {
         return new ClientboundAddEntityPacket(
                 entity.entityId(), entity.uuid(),
                 worldState.currentPos().x(), worldState.currentPos().y(), worldState.currentPos().z(),
-                worldState.currentYaw(), worldState.currentPitch(),
+                worldState.currentPitch(), worldState.currentYaw(),
                 PaperEntityTypes.toNms(entity.entityType()), entity.objectDataValue(),
                 velocity, worldState.currentVerticalHeadRot()
         );

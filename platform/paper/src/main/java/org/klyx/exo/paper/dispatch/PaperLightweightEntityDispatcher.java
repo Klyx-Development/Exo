@@ -28,7 +28,7 @@ public final class PaperLightweightEntityDispatcher implements LightweightEntity
         List<MetaEntry<?>> entries = entity.meta().toEntries();
         for (Map.Entry<Integer, List<UUID>> group : MetaViewerGrouping.groupByProtocolVersion(viewers).entrySet()) {
             ClientboundAddEntityPacket spawnPacket = new ClientboundAddEntityPacket(
-                    entity.entityId(), entity.uuid(), pos.x(), pos.y(), pos.z(), pos.yaw(), pos.pitch(),
+                    entity.entityId(), entity.uuid(), pos.x(), pos.y(), pos.z(), pos.pitch(), pos.yaw(),
                     PaperEntityTypes.toNms(entity.entityType()), 0, Vec3.ZERO, pos.yaw()
             );
             ClientboundSetEntityDataPacket metaPacket = entries.isEmpty()
