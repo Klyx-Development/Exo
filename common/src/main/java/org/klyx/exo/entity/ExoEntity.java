@@ -291,6 +291,18 @@ public abstract class ExoEntity {
         return position.asExoPos();
     }
 
+    /**
+     * Updates the entity's location based on the situation: small movements are sent as
+     * normal move/rotate packets, and only a large jump sends a teleport packet.
+     */
+    public ExoEntity setLocation(ExoWorld world, ExoPos pos) {
+        worldStateManager.setLocation(world, pos);
+        return this;
+    }
+
+    /**
+     * Force a teleportation of this entity
+     */
     public ExoEntity teleport(ExoWorld world, ExoPos pos) {
         worldStateManager.teleport(world, pos);
         return this;

@@ -39,6 +39,25 @@ public class EntityWorldStateManager {
         return worldState;
     }
 
+    /**
+     * Updates the entity's location based on the situation: small movements are sent as
+     * normal move/rotate packets, and only a large jump {@link BLOCK_THRESHOLD_BIG} (or the first sync)
+     * sends a teleport packet.
+     */
+    public void setLocation(ExoWorld world, ExoPos pos) {
+        if (!world.equals(this.worldState.currentWorld())) {
+            setWorld(world);
+        }
+
+        updatePosition(pos.toVec3d(), pos.yaw(), pos.pitch(),
+                this.worldState.currentVerticalHeadRot(), this.worldState.currentOnGround(),
+                this.worldState.currentWorld(), false);
+    }
+
+    /**
+     * Force a teleport packet to be sent unlike {@link #setLocation}, which is more suited towards pathfinding
+     * and tiny movements that require sending movement packets rather than just teleporting.
+     */
     public void teleport(ExoWorld world, ExoPos pos) {
         if (!world.equals(this.worldState.currentWorld())) {
             setWorld(world);
@@ -46,7 +65,7 @@ public class EntityWorldStateManager {
 
         updatePosition(pos.toVec3d(), pos.yaw(), pos.pitch(),
                 this.worldState.currentVerticalHeadRot(), this.worldState.currentOnGround(),
-                this.worldState.currentWorld());
+                this.worldState.currentWorld(), true);
     }
 
     public void setYaw(float yaw) {
@@ -119,10 +138,19 @@ public class EntityWorldStateManager {
 
     private void updatePosition(ExoVec3d position, float yaw, float pitch,
                                 float verticalHeadRot, boolean onGround, ExoWorld world) {
-        updatePosition(this.worldState.syncWith(position, yaw, pitch, verticalHeadRot, onGround, world));
+        updatePosition(position, yaw, pitch, verticalHeadRot, onGround, world, false);
+    }
+
+    private void updatePosition(ExoVec3d position, float yaw, float pitch,
+                                float verticalHeadRot, boolean onGround, ExoWorld world, boolean forceTeleport) {
+        updatePosition(this.worldState.syncWith(position, yaw, pitch, verticalHeadRot, onGround, world), forceTeleport);
     }
 
     private void updatePosition(EntityWorldState position) {
+        updatePosition(position, false);
+    }
+
+    private void updatePosition(EntityWorldState position, boolean forceTeleport) {
         ExoVec3d oldPos = this.worldState.currentPos();
         ExoVec3d newPos = position.currentPos();
 
@@ -137,10 +165,14 @@ public class EntityWorldStateManager {
         }
 
         this.worldState = position;
-        dispatchMovementUpdates();
+        dispatchMovementUpdates(forceTeleport);
     }
 
     private void dispatchMovementUpdates() {
+        dispatchMovementUpdates(false);
+    }
+
+    private void dispatchMovementUpdates(boolean forceTeleport) {
         if (!this.entity.isSpawned() || this.entity.getViewerCount() == 0) {
             markSynced();
             return;
@@ -148,7 +180,7 @@ public class EntityWorldStateManager {
 
         MovementDispatcher movementDispatcher = Exo.platform().movementDispatcher();
 
-        if (this.worldState.needsFullSync()) {
+        if (forceTeleport || this.worldState.needsFullSync()) {
             movementDispatcher.sendTeleport(this.entity, this.worldState);
             movementDispatcher.sendHeadRot(this.entity, this.worldState);
             markSynced();

@@ -71,7 +71,7 @@ public class PhysicsComponent implements EntityComponent {
         if (Math.abs(vz) < STOP_THRESHOLD) vz = 0.0;
 
         entity.setOnGround(grounded);
-        entity.teleport(entity.getWorld(), new ExoPos(newX, newY, newZ, currentPos.yaw(), currentPos.pitch()));
+        entity.setLocation(entity.getWorld(), new ExoPos(newX, newY, newZ, currentPos.yaw(), currentPos.pitch()));
         entity.setVelocity(new ExoVec3d(vx, vy, vz));
     }
 }
