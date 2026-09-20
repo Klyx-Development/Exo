@@ -28,7 +28,7 @@ public class EntityWorldStateManager {
                 initialPos.toVec3d(), null,
                 initialPos.yaw(), null,
                 initialPos.pitch(), null,
-                0f, null,
+                initialPos.yaw(), null,
                 initialOnGround, null,
                 initialVelocity, null,
                 world, null
