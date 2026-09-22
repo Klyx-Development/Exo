@@ -9,12 +9,16 @@ import org.klyx.exo.paper.player.ExoPaperPlayer;
 import org.klyx.exo.player.ExoPlayer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class SpectateComponent implements EntityComponent {
 
     private final List<UUID> spectators = new ArrayList<>();
+
+    private final Set<UUID> forcedViewers = new HashSet<>();
     private @Nullable ExoEntity entity;
 
     @Override
@@ -24,12 +28,17 @@ public class SpectateComponent implements EntityComponent {
     }
 
     public void handleDespawn(EntityDespawnEvent event) {
-        spectators.forEach(spectator -> unspectate(ExoPaperPlayer.of(spectator)));
+        new ArrayList<>(spectators).forEach(spectator -> unspectate(ExoPaperPlayer.of(spectator)));
     }
 
     public void spectate(ExoPlayer player) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity cannot be null");
+        }
+
+        if (!entity.isViewer(player.uuid())) {
+            entity.getViewerManager().forceShow(player);
+            forcedViewers.add(player.uuid());
         }
 
         Exo.platform().spectateDispatcher().dispatchSpectate(player, entity.entityId());
@@ -39,6 +48,10 @@ public class SpectateComponent implements EntityComponent {
     public void unspectate(ExoPlayer player) {
         Exo.platform().spectateDispatcher().dispatchSpectate(player, player.entityId());
         spectators.remove(player.uuid());
+
+        if (entity != null && forcedViewers.remove(player.uuid())) {
+            entity.getViewerManager().forceHide(player);
+        }
     }
 
     public List<UUID> getSpectators() {

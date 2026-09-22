@@ -1,5 +1,7 @@
 package org.klyx.exo.paper.entity.components.types;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.Nullable;
 import org.klyx.exo.Exo;
@@ -10,6 +12,8 @@ import org.klyx.exo.entity.events.EntityDespawnEvent;
 import org.klyx.exo.entity.events.EntitySpawnEvent;
 import org.klyx.exo.entity.events.ViewerShowEntityEvent;
 import org.klyx.exo.paper.dispatch.PaperPassengerDispatcher;
+import org.klyx.exo.paper.player.ExoPaperPlayer;
+import org.klyx.exo.player.ExoPlayer;
 import org.klyx.exo.world.ExoWorld;
 
 import java.util.Collections;
@@ -20,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PassengerComponent implements EntityComponent {
 
     private final Set<Integer> passengers = ConcurrentHashMap.newKeySet();
+    private final Set<Integer> forcedViewers = ConcurrentHashMap.newKeySet();
     private @Nullable ExoEntity entity;
     private @Nullable ExoWorld preRidingWorld;
     private @Nullable ExoPos preRidingPos;
@@ -67,6 +72,7 @@ public class PassengerComponent implements EntityComponent {
         }
 
         passengers.clear();
+        forcedViewers.clear();
         preRidingWorld = null;
         preRidingPos = null;
         riding = -1;
@@ -126,6 +132,12 @@ public class PassengerComponent implements EntityComponent {
         this.passengers.add(passengerId);
         if (this.entity == null) return this;
 
+        ExoPlayer rider = getPlayerFromId(passengerId);
+        if (rider != null && !entity.isViewer(rider.uuid())) {
+            entity.getViewerManager().forceShow(rider);
+            forcedViewers.add(passengerId);
+        }
+
         Exo.platform().passengerDispatcher().dispatchPassengers(entity, entity.entityId(), passengers);
         return this;
     }
@@ -135,7 +147,23 @@ public class PassengerComponent implements EntityComponent {
         if (this.entity == null) return this;
 
         Exo.platform().passengerDispatcher().dispatchPassengers(entity, entity.entityId(), passengers);
+
+        if (forcedViewers.remove(passengerId)) {
+            ExoPlayer rider = getPlayerFromId(passengerId);
+            if (rider != null) entity.getViewerManager().forceHide(rider);
+        }
         return this;
+    }
+
+    private static @Nullable ExoPlayer getPlayerFromId(int entityId) {
+        for (var level : MinecraftServer.getServer().getAllLevels()) {
+            var entity = level.moonrise$getEntityLookup().get(entityId);
+            if (entity instanceof ServerPlayer serverPlayer) {
+                return ExoPaperPlayer.of(serverPlayer.getBukkitEntity());
+            }
+        }
+
+        return null;
     }
 
     public boolean hasPassenger(int passengerId) {

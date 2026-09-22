@@ -140,6 +140,17 @@ public class ViewerManager {
         }
     }
 
+    /**
+     * Forces the entity to be shown to the player, bypassing chunk/tracking systems
+     */
+    public void forceShow(ExoPlayer player) {
+        addViewer(player.uuid(), false);
+    }
+
+    public void forceHide(ExoPlayer player) {
+        removeViewer(player.uuid(), false);
+    }
+
     public void updateViewer(ExoPlayer player) {
         if (!entity.isSpawned()) return;
 
